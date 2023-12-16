@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http//www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<div layout:fragment="content">
+    <h1>Session Information</h1>
+
+    <table>
+        <tr>
+            <th>model 에서 값 참조()</th>
+            <th>
+                <span th:text="${userId}">,</span>
+                <span th:text="${isLogin}"></span>
+            </th>
+        </tr>
+    </table>
+</div>
+
+</html>

@@ -1,0 +1,47 @@
+server:
+  port: 8000
+
+spring:
+  # 타임리프 파일 수정 시 서버 재시작 없이 바로 적용
+  thymeleaf:
+    cache: false
+  profiles:
+    active: local
+# Database 설정
+  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#    url: jdbc:mysql://localhost:{포트번호}/{데이터베이스 이름}?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:log4jdbc:mysql://movie.goosia.com:3306/movie?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: movie
+    password: movie1234
+
+# mybatis 설정
+mybatis:
+  type-aliases-package: dev.moviesearch
+  mapper-locations: classpath:/mybatis/*.xml
+  configuration:
+    multiple-result-sets-enabled: false
+    cache-enabled: false
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+    default-fetch-size: 500
+    default-statement-timeout: 25000
+
+# 로깅 설정
+logging:
+  #  file: ./target/log/server.log
+  level:
+    root: info
+    org.springframework: info
+    log4jdbc.log4j2: info
+    jdbc:
+      sqltiming: info
+      sqlonly: off
+      audit: off
+      resultset: off
+      resultsettable: info
+      connection: off
+    dev.moviesearch: info
+    # 특정 패키지에 로그를 다른 설정으로 보고 싶을 경우 해당 패키지 위치를 적고 로그 레벨을 적어주면 됨
+    dev.moviesearch.app.memo.service: debug

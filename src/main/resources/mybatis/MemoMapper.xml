@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.moviesearch.app.memo.mapper.MemoMapper">
+
+    <select id="selectMemoList" resultType="dev.moviesearch.app.memo.domain.MemoDto">
+        SELECT
+            IDX,
+            CONTENTS
+        FROM
+            movie.memo
+    </select>
+
+    <select id="selectMemo" parameterType="int" resultType="dev.moviesearch.app.memo.domain.MemoDto">
+        SELECT
+            IDX,
+            CONTENTS
+        FROM
+            movie.memo
+        WHERE
+            IDX = #{idx}
+    </select>
+
+    <insert id="insertMemo" parameterType="dev.moviesearch.app.memo.domain.MemoDto">
+        INSERT INTO movie.memo (contents) VALUES (#{contents})
+    </insert>
+
+    <update id="updateMemo" parameterType="dev.moviesearch.app.memo.domain.MemoDto">
+        UPDATE movie.memo SET contents = #{contents} WHERE idx = #{idx}
+    </update>
+
+    <delete id="deleteMemo">
+        DELETE FROM movie.memo WHERE idx = #{idx}
+    </delete>
+
+</mapper>
