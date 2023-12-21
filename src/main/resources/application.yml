@@ -20,6 +20,8 @@ spring:
 # mybatis 설정
 mybatis:
   type-aliases-package: dev.moviesearch
+  type-aliases:
+    userDto: dev.moviesearch.app.user.domain.UserDto
   mapper-locations: classpath:/mybatis/*.xml
   configuration:
     multiple-result-sets-enabled: false
