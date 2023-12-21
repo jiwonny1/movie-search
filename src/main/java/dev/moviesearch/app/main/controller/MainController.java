@@ -18,9 +18,11 @@ public class MainController {
 	@GetMapping("/")
 	public String getIndex(HttpSession session, Model model) {
 		
-		MovieListDto top20 = movieService.getPopularMovieList(1);
+		MovieListDto trend = movieService.getPopularMovieList(1);
+		MovieListDto recentRelease = movieService.getPlayingMovieList(1);
 		
-		model.addAttribute("top20", top20);
+		model.addAttribute("trend", trend);
+		model.addAttribute("recentRelease", recentRelease);
 		
 		return "index";
 	}
