@@ -14,6 +14,14 @@
        	LIMIT
        		20
     </select>
+    
+    <delete id="deleteRecentSearch" parameterType="dev.moviesearch.app.search.domain.SearchLogDto">
+    	DELETE
+    	FROM
+    		movie.SEARCH_LOG
+    	WHERE
+    		USER_ID = #{userId} AND SEARCH_WORD = #{searchWord}
+    </delete>
 
     
 

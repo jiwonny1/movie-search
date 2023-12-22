@@ -20,4 +20,10 @@ public class SearchServiceImpl implements SearchService {
 		return searchMapper.selectRecentSearch(userId);
 	}
 
+	@Override
+	public void deleteRecentSearch(SearchLogDto searchLogDto) {
+		searchMapper.deleteRecentSearch(searchLogDto);
+		
+	}
+
 }

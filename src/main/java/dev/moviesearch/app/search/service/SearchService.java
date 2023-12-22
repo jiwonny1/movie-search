@@ -6,4 +6,5 @@ import dev.moviesearch.app.search.domain.SearchLogDto;
 
 public interface SearchService {
 	List<SearchLogDto> getRecentSearch(String userId);
+	void deleteRecentSearch(SearchLogDto searchLogDto);
 }

@@ -9,4 +9,5 @@ import dev.moviesearch.app.search.domain.SearchLogDto;
 @Mapper
 public interface SearchMapper {
 	List<SearchLogDto> selectRecentSearch(String userId);
+	void deleteRecentSearch(SearchLogDto searchLogDto);
 }
