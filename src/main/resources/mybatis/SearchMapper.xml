@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.moviesearch.app.search.mapper.SearchMapper">
+
+    <select id="selectRecentSearch" parameterType="String" resultType="dev.moviesearch.app.search.domain.SearchLogDto">
+        SELECT
+            USER_ID, SEARCH_WORD, SEARCH_DATE
+        FROM
+            movie.SEARCH_LOG
+        WHERE
+        	USER_ID = #{userId}
+       	ORDER BY
+       		SEARCH_DATE DESC
+       	LIMIT
+       		20
+    </select>
+
+    
+
+</mapper>

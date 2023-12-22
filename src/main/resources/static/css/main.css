@@ -24,7 +24,11 @@ main input.searchInput {
 }
 
 main .recentKeyword {
-	color: white;
+	/* color: white; */
+	cursor: pointer;
+}
+main .deleteRecentSearch {
+	cursor: pointer;
 }
 
 main .starContainer{
