@@ -18,4 +18,7 @@ public class MovieListDto {
 	private int total_results;
 	
 	private Map<String, Date> dates;
+	
+	// 검색 조건
+	private String[] searchCondition;
 }

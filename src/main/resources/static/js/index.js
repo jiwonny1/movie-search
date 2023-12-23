@@ -14,6 +14,11 @@ function eventOn() {
 	$(".recentKeyword").on("click", function() {
 		appendKeyword(this);
 	})
+	
+	// 검색 버튼 클릭
+	$("button.search").on("click", function() {
+		search();
+	})
 }
 
 // 로직 실행 함수들------------------------------------------------------
@@ -24,7 +29,7 @@ function deleteRecentSearch(clickedObject){
 	$.ajax({
 		url: "/search/deleteRecentSearch",
 		type: "POST",
-		data: {searchWord : searchWord},
+		data: {searchWord: searchWord},
 		success: function() {
 			$(clickedObject).parent().remove();
 		}
@@ -44,4 +49,22 @@ function appendKeyword(clickedObject) {
 		afterKeywords = beforeKeywords + ", " + keyword;
 	
 	$input.val(afterKeywords);
+}
+
+function search() {
+	let rawInput = $("input.searchInput").val().split(",");
+	
+	for(raw of rawInput) {
+		let keyword = raw.trim();
+		if(keyword.length == 0) continue;
+		if($("form input[value='" + keyword + "']").length == 0)
+			$("form").append($('<input/>', {type: 'hidden', name: 'keywords', value: keyword }));
+	}
+	
+	$("input.searchInput").attr("disabled", true);
+	
+	$("form").submit();
+	
+	$("input.searchInput").attr("disabled", false);
+	$("form input[type='hidden']").remove();
 }
