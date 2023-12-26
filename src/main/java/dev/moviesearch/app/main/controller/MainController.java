@@ -39,6 +39,10 @@ public class MainController {
 		// 영화 리스트 가져오기------------------------------------------
 		MovieListDto trend = movieService.getPopularMovieList(1);
 		MovieListDto recentRelease = movieService.getPlayingMovieList(1);
+		
+		System.out.println(">>>>>>>" + trend);
+		System.out.println(">>>>>>>" + recentRelease);
+		
 		model.addAttribute("trend", trend);
 		model.addAttribute("recentRelease", recentRelease);
 		//---------------------------------------------------------------

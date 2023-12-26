@@ -9,22 +9,28 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dev.moviesearch.app.movieapi.domain.MovieDto;
 import dev.moviesearch.app.movieapi.domain.MovieListDto;
+import dev.moviesearch.app.movieapi.mapper.MovieMapper;
 import dev.moviesearch.app.movieapi.service.MovieService;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
 public class MovieServiceImpl implements MovieService {
 	private ObjectMapper mapper = new ObjectMapper(); 
-	private String accessToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5OWEzMjg1MTRlNTZiZjBmMDQyNWE4M2U4MTMzZDE1ZiIsInN1YiI6IjY1N2JiMGNlN2EzYzUyMDBjYTdiMzYzZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.UEuBUn0_d32uIRvHVkxY8yF8a84APoHMkF5lCdcAwa0";
+	private String accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5OWEzMjg1MTRlNTZiZjBmMDQyNWE4M2U4MTMzZDE1ZiIsInN1YiI6IjY1N2JiMGNlN2EzYzUyMDBjYTdiMzYzZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.UEuBUn0_d32uIRvHVkxY8yF8a84APoHMkF5lCdcAwa0";
 	private String language = "ko-KR";
 	private String region = "KR";
 
+	private final MovieMapper movieMapper;
 	
 	@Override
 	public MovieListDto getPopularMovieList(int page) {
@@ -52,6 +58,12 @@ public class MovieServiceImpl implements MovieService {
 		return movieList;
 	}
 	
+	@Override
+	public void insertMovieList(List<MovieDto> data) {
+		movieMapper.insertMovieList(data);
+		
+	}
+	
 	
 //============================================== private methods ================================================
 	
@@ -60,7 +72,7 @@ public class MovieServiceImpl implements MovieService {
 		HttpRequest request = HttpRequest.newBuilder()
 			    .uri(URI.create(requestURL))
 			    .header("accept", "application/json")
-			    .header("Authorization", accessToken)
+			    .header("Authorization", "Bearer " + accessToken)
 			    .method("GET", HttpRequest.BodyPublishers.noBody())
 			    .build();
 		
@@ -87,6 +99,8 @@ public class MovieServiceImpl implements MovieService {
 		
 		return result;
 	}
+
+	
 
 
 	
