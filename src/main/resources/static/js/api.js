@@ -20,8 +20,49 @@ function makeList(data) {
     data.results.forEach((movie, index) => {
         const li = document.createElement("li");
         li.textContent = `${index}, ${movie.title}`;
+
+        // 클릭 이벤트 리스너 추가
+        li.addEventListener("click", () => {
+            // 영화 상세 페이지 URL을 생성 (예: /movie/detail/{id})
+            const detailPageUrl = `/post/detail/${movie.id}`;
+
+            // 페이지 이동
+            window.location.href = detailPageUrl;
+        });
+
         listBox.appendChild(li);
     });
+}
+// 현재 URL을 가져오기
+// const contentId = document.getElementById("movieDetail").getAttribute("data-movie-id");
+
+const currentUrl = window.location.href;
+
+// URL에서 contentId 추출 (예: http://localhost:8000/post/detail/385687)
+const contentIdMatch = currentUrl.match(/\/post\/detail\/(\d+)/);
+
+// contentId가 있는지 확인하고 값을 가져오기
+const contentId = contentIdMatch ? contentIdMatch[1] : null;
+if (contentId) {
+    fetch(`https://api.themoviedb.org/3/movie/${contentId}?language=ko-KR`, options)
+        .then(response => response.json())
+        .then(response => {
+            showDetail(response);
+            console.log(response);
+        })
+        .catch(err => console.error(err));
+}
+function showDetail(movieData) {
+    // 영화 포스터, 제목, 줄거리를 페이지에 적용
+    const moviePoster = document.getElementById("moviePoster");
+    const movieTitle = document.getElementById("movieTitle");
+    const movieOverview = document.getElementById("movieOverview");
+
+    // 포스터, 제목, 줄거리 데이터를 가져와서 적용
+    const { poster_path, title, overview } = movieData;
+    moviePoster.src = `https://image.tmdb.org/t/p/original/${poster_path}`;
+    movieTitle.textContent = title;
+    movieOverview.textContent = overview;
 }
 
 /**

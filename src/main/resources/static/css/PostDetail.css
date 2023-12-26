@@ -1,0 +1,85 @@
+div.header_poster_wrapper {
+    display: flex;
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+.header_info {
+    width: 100%; /* 남는 공간을 모두 활용하도록 설정 */
+}
+
+#moviePoster {
+    width: 100%; /* 부모 요소에 꽉 차게 이미지 크기 조정 */
+    height: auto;
+}
+
+#movieTitle {
+    margin-bottom: 10px; /* 제목과 줄거리 간격 조정 */
+}
+div.header.large.first {
+    border-bottom: 1px solid var(--primaryColor);
+    background-position: left calc((50vw - 170px) - 340px) top;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(/t/p/w1920_and_h800_multi_faces/xuCHkaxkkm9pPum1SByC0dhvR2U.jpg);
+}
+div.header.large.first {
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    border-bottom: 1px solid rgba(var(--lightGrey),1);
+    border-style: none;
+}
+div.header {
+    background: linear-gradient(to bottom right, rgba(31.5, 31.5, 52.5, 1), rgba(31.5, 31.5, 52.5, 0.84));
+}
+section.inner_content div.custom_bg {
+    background-image: linear-gradient(to right, rgba(31.5, 31.5, 52.5, 1) calc((50vw - 170px) - 340px), rgba(31.5, 31.5, 52.5, 0.84) 50%, rgba(31.5, 31.5, 52.5, 0.84) 100%);
+}
+
+div.custom_bg {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+section div.header.first div.single_column {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+section div.header div.single_column {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+div.single_column {
+    /*max-width: var(--maxPrimaryPageWidth);*/
+    width: 100%;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    z-index: 0;
+    box-sizing: border-box;
+}
+section.inner_content section.header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: center;
+    box-sizing: border-box;
+    padding-left: 40px;
+}
+/*section.inner_content section.images>div.poster_wrapper.true {*/
+/*    height: auto;*/
+/*}*/
+section.inner_content div.header div.single_column *, section.inner_content div.header div.single_column a {
+    color: #fff;
+}
+/*section.inner_content section.images>div.poster_wrapper {*/
+/*    border-width: 0;*/
+/*    min-width: 300px;*/
+/*    width: 300px;*/
+/*    height: 450px;*/
+/*    overflow: hidden;*/
+/*    border-radius: var(--imageBorderRadius);*/
+/*}*/
+ section.inner_content section.header div.title div.facts {
+    display: flex;
+}
