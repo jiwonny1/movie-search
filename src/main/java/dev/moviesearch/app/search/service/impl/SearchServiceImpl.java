@@ -26,4 +26,10 @@ public class SearchServiceImpl implements SearchService {
 		
 	}
 
+	@Override
+	public void insertRecentSearch(List<SearchLogDto> data) {
+		searchMapper.insertRecentSearch(data);
+		
+	}
+
 }

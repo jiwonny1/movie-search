@@ -22,6 +22,21 @@
     	WHERE
     		USER_ID = #{userId} AND SEARCH_WORD = #{searchWord}
     </delete>
+    
+    <insert id="insertRecentSearch" parameterType="dev.moviesearch.app.search.domain.SearchLogDto">
+    	INSERT INTO movie.SEARCH_LOG
+    	(
+    		USER_ID, SEARCH_WORD, SEARCH_DATE
+    	)
+    	VALUES
+    	<foreach collection="list" item="log" separator=" , ">
+    		(
+				#{log.userId}, #{log.searchWord}, now()
+    		)
+    	</foreach>
+    	ON DUPLICATE KEY UPDATE
+    	SEARCH_DATE = now()
+    </insert>
 
     
 

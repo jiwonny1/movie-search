@@ -1,5 +1,8 @@
 package dev.moviesearch.app.search.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,12 +29,22 @@ public class SearchController {
 	@GetMapping("")
 	public String search(HttpSession session, String[] keywords, Model model) {
 		
-		System.out.println(">>>"+keywords);
+		String userId = (String)session.getAttribute("user");
 		
 		// 개발용 코드------------------------------------------
 		MovieListDto trend = movieService.getPopularMovieList(1);
 		model.addAttribute("trend", trend);
 		//---------------------------------------------------------------
+		
+		// 로그 등록----------------------------------------------
+		List<SearchLogDto> data = new ArrayList<>();
+		for(String keyword : keywords) {
+			data.add(SearchLogDto.builder()
+								 .userId(userId)
+								 .SearchWord(keyword)
+								 .build());
+		}
+		searchService.insertRecentSearch(data);
 		
 		return "searchList";
 	}
