@@ -59,6 +59,17 @@ public class MovieServiceImpl implements MovieService {
 	}
 	
 	@Override
+	public MovieListDto getMovieListForInsert(int page, int year) {
+		MovieListDto movieList = null;
+		String requestURL = "https://api.themoviedb.org/3/discover/movie?include_video=false&region=" + region + "&language=" + language + "&page=" + page + "&sort_by=popularity.asc&year=" + year;
+		
+		String jsonData = sendRequest(requestURL);
+		movieList = (MovieListDto) convertJsonToVo(jsonData, MovieListDto.class);
+		
+		return movieList;
+	}
+	
+	@Override
 	public void insertMovieList(List<MovieDto> data) {
 		movieMapper.insertMovieList(data);
 		
@@ -99,6 +110,10 @@ public class MovieServiceImpl implements MovieService {
 		
 		return result;
 	}
+
+	
+
+	
 
 	
 

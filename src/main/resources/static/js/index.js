@@ -51,6 +51,7 @@ function appendKeyword(clickedObject) {
 	$input.val(afterKeywords);
 }
 
+// 검색
 function search() {
 	let rawInput = $("input.searchInput").val().split(",");
 	
@@ -59,6 +60,11 @@ function search() {
 		if(keyword.length == 0) continue;
 		if($("form input[value='" + keyword + "']").length == 0)
 			$("form").append($('<input/>', {type: 'hidden', name: 'keywords', value: keyword }));
+	}
+	
+	if($("form").find("input[type='hidden']").length == 0) {
+		alert("검색어를 입력해 주세요.");
+		return;
 	}
 	
 	$("input.searchInput").attr("disabled", true);

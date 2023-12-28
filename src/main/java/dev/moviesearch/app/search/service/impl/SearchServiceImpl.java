@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import dev.moviesearch.app.movieapi.domain.MovieDto;
 import dev.moviesearch.app.search.domain.SearchLogDto;
 import dev.moviesearch.app.search.mapper.SearchMapper;
 import dev.moviesearch.app.search.service.SearchService;
@@ -30,6 +31,11 @@ public class SearchServiceImpl implements SearchService {
 	public void insertRecentSearch(List<SearchLogDto> data) {
 		searchMapper.insertRecentSearch(data);
 		
+	}
+
+	@Override
+	public List<MovieDto> searchByTitle(String[] keywords) {
+		return searchMapper.selectByTitle(keywords);
 	}
 
 }

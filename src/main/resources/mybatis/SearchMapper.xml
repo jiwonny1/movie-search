@@ -38,6 +38,28 @@
     	SEARCH_DATE = now()
     </insert>
 
+
+	<select id="selectByTitle" parameterType="String" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
+   		SELECT 
+   			CONTENT_ID ID,
+   			TITLE,
+   			RELEASE_DATE,
+   			POSTER_PATH,
+   			ADULT,
+   			ORIGINAL_LANGUAGE,
+   			POPULARITY,
+   			VOTE_AVERAGE,
+   			VOTE_COUNT
+   		FROM
+   			movie.CONTENT
+   		<where>
+   			<foreach collection="array" item="keyword" separator=" and ">
+   				TITLE like concat('%', #{keyword}, '%')
+   			</foreach>
+   		</where>
+   		ORDER BY
+   			POPULARITY DESC
+   	</select>
     
 
 </mapper>

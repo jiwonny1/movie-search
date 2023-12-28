@@ -8,9 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import dev.moviesearch.app.movieapi.domain.MovieDto;
 import dev.moviesearch.app.movieapi.domain.MovieListDto;
 import dev.moviesearch.app.movieapi.service.MovieService;
 import dev.moviesearch.app.search.domain.SearchLogDto;
@@ -31,20 +31,26 @@ public class SearchController {
 		
 		String userId = (String)session.getAttribute("user");
 		
-		// 개발용 코드------------------------------------------
-		MovieListDto trend = movieService.getPopularMovieList(1);
-		model.addAttribute("trend", trend);
-		//---------------------------------------------------------------
+//		// 개발용 코드------------------------------------------
+//		MovieListDto trend = movieService.getPopularMovieList(1);
+//		model.addAttribute("trend", trend);
+//		//---------------------------------------------------------------
 		
 		// 로그 등록----------------------------------------------
-		List<SearchLogDto> data = new ArrayList<>();
-		for(String keyword : keywords) {
-			data.add(SearchLogDto.builder()
-								 .userId(userId)
-								 .SearchWord(keyword)
-								 .build());
+		if(userId != null) {
+			List<SearchLogDto> data = new ArrayList<>();
+			for(String keyword : keywords) {
+				data.add(SearchLogDto.builder()
+									 .userId(userId)
+									 .SearchWord(keyword)
+									 .build());
+			}
+			searchService.insertRecentSearch(data);
 		}
-		searchService.insertRecentSearch(data);
+		
+		// 제목으로 검색--------------------------------------------
+		List<MovieDto> title = searchService.searchByTitle(keywords);
+		model.addAttribute("title", title);
 		
 		return "searchList";
 	}

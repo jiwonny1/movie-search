@@ -17,11 +17,11 @@
     <main>
     	<div class="titleResultContainer text-nowrap mt-3 mx-3">
     		<div class="chartTitle">
-    			<h2 class="d-inline-block">현재 트렌드</h2>
+    			<h2 class="d-inline-block">제목</h2>
     			<hr class="d-inline-block w-100 m-0 mb-2" />
     		</div>
     		<div class="cardContainer ">
-	    		<div th:each="list, state : ${trend.results}" th:if="${state.count <= 6}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
+	    		<div th:each="list, state : ${title}" th:if="${state.count <= 6}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
 	    			<a th:href="@{|movie/${list.id}|}" class="text-black">
 		    			<div class="card-img-top overflow-hidden">
 							<img th:src="@{|https://image.tmdb.org/t/p/w500${list.posterPath}|}" class="card-img-top" alt="영화 포스터">

@@ -11,12 +11,8 @@
 	    		RELEASE_DATE,
 	    		POSTER_PATH,
 	    		ADULT,
-	    		BACKDROP_PATH,
 	    		ORIGINAL_LANGUAGE,
-	    		ORIGINAL_TITLE,
-	    		OVERVIEW,
 	    		POPULARITY,
-	    		VIDEO,
 	    		VOTE_AVERAGE,
 	    		VOTE_COUNT
 	    	)
@@ -28,12 +24,8 @@
 		    	#{item.releaseDate},
 		   		#{item.posterPath},
 		   		#{item.adult},
-		   		#{item.backdropPath},
 		   		#{item.originalLanguage},
-		   		#{item.originalTitle},
-		   		#{item.overview},
 		   		#{item.popularity},
-		   		#{item.video},
 		   		#{item.voteAverage},
 		   		#{item.voteCount}
 	    	)
@@ -62,7 +54,5 @@
 	    	</if>
     	</foreach>
     </insert>
-
-    
 
 </mapper>
