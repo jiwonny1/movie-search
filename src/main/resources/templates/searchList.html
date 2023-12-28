@@ -15,7 +15,10 @@
 
 <div layout:fragment="content">
     <main>
-    	<div class="titleResultContainer text-nowrap mt-3 mx-3">
+    	<!-- 조건 하나씩 추가해야 함 -->
+    	<h1 th:if="${title.size() == 0}">검색 결과가 없습니다.</h1>
+    	
+    	<div th:if="${title.size() > 0}" class="titleResultContainer text-nowrap mt-3 mx-3">
     		<div class="chartTitle">
     			<h2 class="d-inline-block">제목</h2>
     			<hr class="d-inline-block w-100 m-0 mb-2" />
