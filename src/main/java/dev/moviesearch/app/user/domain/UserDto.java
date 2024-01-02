@@ -22,7 +22,7 @@ public class UserDto {
 	private Integer age;
 	
 	@NotBlank(message="아이디는 필수 입력 값입니다.")
-	@Max(value=12, message = "아이디는 최대 12글자 이내로 입력해주세요.")
+	@Size(min=3, max=12, message = "아이디는 최소 3글자 이상, 최대 12글자 이내로 입력해주세요.")
     private String userId;
 	
 	@NotBlank(message="비밀번호는 필수 입력 값입니다.")
