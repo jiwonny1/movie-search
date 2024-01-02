@@ -5,7 +5,7 @@ import dev.moviesearch.app.review.domain.ReviewDto;
 import java.util.List;
 
 public interface ReviewService {
-    List<ReviewDto> findReviewList();
+    List<ReviewDto> findReviewList(int contentId);
 
 //    ReviewDto findReview(int contentId);
 

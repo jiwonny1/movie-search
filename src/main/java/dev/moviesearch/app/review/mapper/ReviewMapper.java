@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface ReviewMapper {
-    List<ReviewDto> selectReviewList();
+    List<ReviewDto> selectReviewList(int contentId);
 
     ReviewDto selectReview(int idx);
 

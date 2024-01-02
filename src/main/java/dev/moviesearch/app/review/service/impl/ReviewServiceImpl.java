@@ -19,11 +19,11 @@ public class ReviewServiceImpl implements ReviewService {
     private ReviewMapper reviewMapper;
 
     @Override
-    public List<ReviewDto> findReviewList() {
+    public List<ReviewDto> findReviewList(int contentId) {
         log.info("===============================================================");
         log.info("로그 출력을 확인 합니다.");
         log.info("===============================================================");
-        return reviewMapper.selectReviewList();
+        return reviewMapper.selectReviewList(contentId);
     }
 
 //    @Override

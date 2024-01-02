@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dev.moviesearch.app.review.mapper.ReviewMapper">
 
-    <select id="selectReviewList" resultType="dev.moviesearch.app.review.domain.ReviewDto">
+    <select id="selectReviewList"  parameterType="int" resultType="dev.moviesearch.app.review.domain.ReviewDto">
         SELECT
             USER_ID,
             CONTENT_ID,
@@ -10,6 +10,8 @@
             CONTENT
         FROM
             movie.REVIEW
+        WHERE
+            CONTENT_ID = #{contentId}
     </select>
 
     <select id="selectReview" parameterType="int" resultType="dev.moviesearch.app.review.domain.ReviewDto">
@@ -26,7 +28,7 @@
 
     <insert id="insertReview" parameterType="dev.moviesearch.app.review.domain.ReviewDto">
         INSERT INTO movie.REVIEW (USER_ID, CONTENT_ID, STAR, CONTENT)
-        VALUES (#{userId}, #{contentId}, #{star}, #{content}
+        VALUES (#{userId}, #{contentId}, #{star}, #{content})
     </insert>
 
     <update id="updateReview" parameterType="dev.moviesearch.app.review.domain.ReviewDto">
