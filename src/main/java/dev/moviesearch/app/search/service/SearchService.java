@@ -11,4 +11,5 @@ public interface SearchService {
 	void insertRecentSearch(List<SearchLogDto> data);
 	
 	List<MovieDto> searchByTitle(String[] keywords);
+	List<MovieDto> searchByKeyword(String[] keywords);
 }

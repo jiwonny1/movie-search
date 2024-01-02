@@ -1,6 +1,10 @@
 package dev.moviesearch.app.search.service.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -36,6 +40,14 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public List<MovieDto> searchByTitle(String[] keywords) {
 		return searchMapper.selectByTitle(keywords);
+	}
+
+	@Override
+	public List<MovieDto> searchByKeyword(String[] keywords) {
+		List<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
+		Map<String, Object> data = new HashMap<>();
+		data.put("list", keywordList);
+		return searchMapper.selectByKeyword(data);
 	}
 
 }

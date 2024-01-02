@@ -52,6 +52,10 @@ public class SearchController {
 		List<MovieDto> title = searchService.searchByTitle(keywords);
 		model.addAttribute("title", title);
 		
+		// 제목으로 검색--------------------------------------------
+		List<MovieDto> keyword = searchService.searchByKeyword(keywords);
+		model.addAttribute("keyword", keyword);
+
 		return "searchList";
 	}
 	

@@ -1,6 +1,7 @@
 package dev.moviesearch.app.search.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,4 +15,6 @@ public interface SearchMapper {
 	void insertRecentSearch(List<SearchLogDto> data);
 	
 	List<MovieDto> selectByTitle(String[] keywords);
+	List<MovieDto> selectByKeyword(Map<String, Object> keywords);
+	
 }

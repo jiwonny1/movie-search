@@ -20,7 +20,7 @@
     	
     	<div th:if="${title.size() > 0}" class="titleResultContainer text-nowrap mt-3 mx-3">
     		<div class="chartTitle">
-    			<h2 class="d-inline-block">제목</h2>
+    			<h2 class="d-inline-block">제목이 일치하는 항목</h2>
     			<hr class="d-inline-block w-100 m-0 mb-2" />
     		</div>
     		<div class="cardContainer ">
@@ -50,6 +50,37 @@
 			
     	</div>
     	
+    	<div th:if="${keyword.size() > 0}" class="keywordResultContainer text-nowrap mt-3 mx-3">
+    		<div class="chartTitle">
+    			<h2 class="d-inline-block">키워드가 일치하는 항목</h2>
+    			<hr class="d-inline-block w-100 m-0 mb-2" />
+    		</div>
+    		<div class="cardContainer ">
+	    		<div th:each="list, state : ${keyword}" th:if="${state.count <= 6}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
+	    			<a th:href="@{|movie/${list.id}|}" class="text-black">
+		    			<div class="card-img-top overflow-hidden">
+							<img th:src="@{|https://image.tmdb.org/t/p/w500${list.posterPath}|}" class="card-img-top" alt="영화 포스터">
+		    			</div>
+						<div class="card-body">
+							<span th:text="${list.title}" class="d-block mb-3 text-wrap lh-1 fs-6 fw-bold">영화 제목</span>
+							<div class="starContainer">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="orange" class="bi bi-star-fill" viewBox="0 0 16 16">
+									<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+								</svg>
+								<span th:text="${#numbers.formatDecimal(list.voteAverage, 1, 1)}" class="align-text-top">평점</span>
+							</div>
+					  		<p th:text="${#dates.format(list.releaseDate, 'yyyy년 MM월 dd일')}" class="card-text">개봉일자</p>
+						</div>
+					</a>
+				</div>
+				<button class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+						<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+					</svg>
+				</button>
+			</div>
+			
+    	</div>
     	
     </main>
 </div>

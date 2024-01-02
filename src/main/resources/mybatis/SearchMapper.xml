@@ -45,7 +45,6 @@
    			TITLE,
    			RELEASE_DATE,
    			POSTER_PATH,
-   			ADULT,
    			ORIGINAL_LANGUAGE,
    			POPULARITY,
    			VOTE_AVERAGE,
@@ -59,6 +58,46 @@
    		</where>
    		ORDER BY
    			POPULARITY DESC
+   	</select>
+   	
+   	<select id="selectByKeyword" parameterType="map" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
+   		SELECT 
+   			C.CONTENT_ID ID,
+   			C.TITLE,
+   			C.RELEASE_DATE,
+   			C.POSTER_PATH,
+   			C.ORIGINAL_LANGUAGE,
+   			C.POPULARITY,
+   			C.VOTE_AVERAGE,
+   			C.VOTE_COUNT
+   		FROM
+   			movie.CONTENT C
+   		WHERE
+   			C.CONTENT_ID IN 
+   			(
+   			SELECT DISTINCT A.CONTENT_ID FROM 
+				movie.KEYWORD A
+			INNER JOIN
+				(
+				SELECT 
+					CONTENT_ID, COUNT(CONTENT_ID) COUNT 
+				FROM 
+					movie.KEYWORD 
+				WHERE 
+					KEYWORD IN
+					(
+					<foreach collection="list" item="keyword" separator=" , ">
+		   				#{keyword}
+		   			</foreach>
+					) 
+				GROUP BY 
+					CONTENT_ID 
+				) B
+			ON 
+				B.CONTENT_ID = A.CONTENT_ID
+			WHERE
+				B.COUNT = ${list.size()}
+			)
    	</select>
     
 
