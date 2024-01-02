@@ -22,19 +22,15 @@ public class PostController {
 	private PostService postService;
 
 
-	/**
-	 * jsp 파일 없이 화면에 json type 으로 값을 뿌리는 방법
-	 */
-	@GetMapping("/sample")
-	public ResponseEntity<List<PostDto>> sample() {
-		List<PostDto> memoList = postService.findPostList();
-		return new ResponseEntity<>(memoList, HttpStatus.OK);
-	}
+//	/**
+//	 * jsp 파일 없이 화면에 json type 으로 값을 뿌리는 방법
+//	 */
+//	@GetMapping("/sample")
+//	public ResponseEntity<List<PostDto>> sample() {
+//		List<PostDto> memoList = postService.findPostList();
+//		return new ResponseEntity<>(memoList, HttpStatus.OK);
+//	}
 
-	/**
-	 * 위와 같은 결과
-	 * @return
-	 */
 
 	//getPost
 //	@GetMapping("/postList")
@@ -45,10 +41,10 @@ public class PostController {
 
 	@GetMapping("/detail/{contentId}")
 	public String showMovieDetail(@PathVariable int contentId, Model model) {
-		// Movie 객체를 모델에 추가
-		model.addAttribute("contentId", contentId);
+		PostDto dto = postService.findPost(contentId);
+		model.addAttribute("post", dto);
 
-		return "postDetail";
+		return "postDetail2";
 	}
 	@GetMapping("/session")
 	public String session(Model model, HttpSession session) {
@@ -78,28 +74,28 @@ public class PostController {
 		ModelAndView mav = new ModelAndView("error");
 		return mav;
 	}
+//
+//	// 포스트 등록 화면
+//	@GetMapping("/insert")
+//	public String showInsertPost() {
+//		return "insert";
+//	}
 
-	// 메모 등록 요청
-	@GetMapping("/insert")
-	public String showInsertPost() {
-		return "insert";
-	}
+//	// 포스트 등록
+//	@PostMapping("/create")
+//	public String CreatePost(@ModelAttribute PostDto req) {
+//		postService.insertPost(req);
+//		return "redirect:/postList";
+//	}
 
-	// 포스트 등록
-	@PostMapping("/create")
-	public String CreatePost(@ModelAttribute PostDto req) {
-		postService.insertPost(req);
-		return "redirect:/postList";
-	}
-
-	// 메모 수정 요청
+	// 포스트 수정 요청
 	@GetMapping("/memo/{idx}/update")
 	public String showUpdateMemo(Model model, @PathVariable int idx) {
 		model.addAttribute("memo", postService.findPost(idx));
 		return "update";
 	}
 
-	// 메모 수정
+	// 포스트 수정
 	@PutMapping("/memo")
 	public String updateMemo(@ModelAttribute PostDto req) {
 		postService.updatePost(req);

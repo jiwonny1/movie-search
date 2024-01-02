@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Detail</title>
+    <link th:href="@{/css/PostDetail.css}" rel="stylesheet" />
+<style>
+    .star-rating {
+        display: inline-block;
+        font-size: 0;
+    }
+
+    .star-rating input[type='radio'] {
+        display: none;
+    }
+
+    .star-rating label {
+        display: inline-block;
+        width: 1em;
+        font-size: 1.5rem;
+        line-height: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .star-rating label::before {
+        content: '\2605'; /* 별 모양 유니코드 */
+        display: block;
+    }
+
+    .star-rating label.selected::before {
+        content: '\2605'; /* 선택된 별은 채워진 별로 변경 */
+        color: gold;
+    }
+</style>
+</head>
+
+<body>
+<div class="header large border first">
+    <div class="keyboard_s custom_bg">
+        <div class="single_column">
+            <section id="original_header">
+                <div class="poster_wrapper true">
+                    <div class="poster">
+                        <div class="image_content backdrop">
+                            <img class="poster lazyload lazyloaded" id="moviePoster" th:src="@{'https://image.tmdb.org/t/p/original/' + ${post.posterPath}}" style="max-width: 100%;
+                height: auto;">
+                        </div>
+                    </div>
+                </div>
+                <div class="header_poster_wrapper true">
+                    <section class="header poster">
+                        <div class="title ott_true" dir="auto" id="movieDetail">
+                            <h2 id="movieTitle">
+                                <span class="tag release_date" th:text="${post.title}"></span>
+                                <span th:text="${#dates.format(post.releaseDate, '(yyyy)')}">()</span>
+                            </h2>
+                        </div>
+                        <div class="header_info">
+                            <h3 dir="auto">개요</h3>
+                            <div class="overview" dir="auto">
+                                <p id="movieOverview" ></p>
+                            </div>
+                        </div>
+                        <div class="review-list">
+                            <h3>리뷰 목록</h3>
+                            <ul>
+                                <li th:each="review : ${reviews}">
+                                    <!-- 리뷰 내용 출력 -->
+                                    <p th:text="${review.content}"></p>
+                                    <!-- 별점 출력 -->
+                                    <span th:text="${review.star}"></span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="review-form">
+                            <h3>리뷰 작성</h3>
+                            <form th:action="@{'/review/create/' + ${post.contentId}}" method="post">
+                                <!-- 별점 입력 폼 -->
+                                <div class="star-rating">
+                                    <span>별점: </span>
+                                    <input type="radio" name="star" value="1" id="1-star"><label for="1-star"></label>
+                                    <input type="radio" name="star" value="2" id="2-stars"><label for="2-stars"></label>
+                                    <input type="radio" name="star" value="3" id="3-stars"><label for="3-stars"></label>
+                                    <input type="radio" name="star" value="4" id="4-stars"><label for="4-stars"></label>
+                                    <input type="radio" name="star" value="5" id="5-stars"><label for="5-stars"></label>
+                                </div>
+                                <br>
+                                <textarea name="content" rows="4" cols="50" placeholder="리뷰를 작성하세요"></textarea>
+                                <input type="submit" value="리뷰 등록">
+                            </form>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/api2.js}"></script>
+</body>
+</html>
