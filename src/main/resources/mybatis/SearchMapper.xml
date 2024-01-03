@@ -39,7 +39,7 @@
     </insert>
 
 
-	<select id="selectByTitle" parameterType="String" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
+	<select id="selectByTitle" parameterType="map" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
    		SELECT 
    			CONTENT_ID ID,
    			TITLE,
@@ -52,15 +52,17 @@
    		FROM
    			movie.CONTENT
    		<where>
-   			<foreach collection="array" item="keyword" separator=" and ">
+   			<foreach collection="keywords" item="keyword" separator=" and ">
    				TITLE like concat('%', #{keyword}, '%')
    			</foreach>
    		</where>
    		ORDER BY
    			POPULARITY DESC
+   		LIMIT
+   			${(page * 20) - 20}, ${(page * 20) - 1}
    	</select>
    	
-   	<select id="selectByPartOfTitle" parameterType="String" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
+   	<select id="selectByPartOfTitle" parameterType="map" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
    		SELECT 
    			CONTENT_ID ID,
    			TITLE,
@@ -80,7 +82,7 @@
 		   		FROM
 		   			movie.CONTENT
 		   		<where>
-		   			<foreach collection="array" item="keyword" separator=" or ">
+		   			<foreach collection="keywords" item="keyword" separator=" or ">
 		   				TITLE like concat('%', #{keyword}, '%')
 		   			</foreach>
 		   		</where>
@@ -93,13 +95,15 @@
 		   		FROM
 		   			movie.CONTENT
 		   		<where>
-		   			<foreach collection="array" item="keyword" separator=" and ">
+		   			<foreach collection="keywords" item="keyword" separator=" and ">
 		   				TITLE like concat('%', #{keyword}, '%')
 		   			</foreach>
 		   		</where>
 		   		)
 		ORDER BY
    			POPULARITY DESC
+   		LIMIT
+   			${(page * 20) - 20}, ${(page * 20) - 1}
    	</select>
    	
    	<select id="selectByKeyword" parameterType="map" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
@@ -128,7 +132,7 @@
 					WHERE 
 						KEYWORD IN
 						(
-						<foreach collection="list" item="keyword" separator=" , ">
+						<foreach collection="keywords" item="keyword" separator=" , ">
 			   				#{keyword}
 			   			</foreach>
 						) 
@@ -138,10 +142,12 @@
 				ON 
 					B.CONTENT_ID = A.CONTENT_ID
 				WHERE
-					B.COUNT = ${list.size()}
+					B.COUNT = ${keywords.size()}
 				)
 		ORDER BY
    			C.POPULARITY DESC
+   		LIMIT
+   			${(page * 20) - 20}, ${(page * 20) - 1}
    	</select>
    	
    	<select id="selectByHalfKeyword" parameterType="map" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
@@ -170,7 +176,7 @@
 					WHERE 
 						KEYWORD IN
 						(
-						<foreach collection="list" item="keyword" separator=" , ">
+						<foreach collection="keywords" item="keyword" separator=" , ">
 			   				#{keyword}
 			   			</foreach>
 						) 
@@ -180,7 +186,7 @@
 				ON 
 					B.CONTENT_ID = A.CONTENT_ID
 				WHERE
-					B.COUNT <![CDATA[<]]>  ${list.size()}
+					B.COUNT <![CDATA[<]]>  ${keywords.size()}
 				)
 			AND
 			C.CONTENT_ID NOT IN
@@ -196,7 +202,7 @@
 					WHERE 
 						KEYWORD IN
 						(
-						<foreach collection="list" item="keyword" separator=" , ">
+						<foreach collection="keywords" item="keyword" separator=" , ">
 			   				#{keyword}
 			   			</foreach>
 						) 
@@ -206,10 +212,12 @@
 				ON 
 					B.CONTENT_ID = A.CONTENT_ID
 				WHERE
-					B.COUNT = ${list.size()}
+					B.COUNT = ${keywords.size()}
 				)
 		ORDER BY
    			C.POPULARITY DESC
+   		LIMIT
+   			${(page * 20) - 20}, ${(page * 20) - 1}
    	</select>
     
 

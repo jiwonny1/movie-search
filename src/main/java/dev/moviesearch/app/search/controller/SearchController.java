@@ -49,24 +49,24 @@ public class SearchController {
 		}
 		
 		// 제목으로 검색--------------------------------------------
-		List<MovieDto> title = searchService.searchByTitle(keywords);
+		List<MovieDto> title = searchService.searchByTitle(keywords, 1);
 		model.addAttribute("title", title);
 		
 		
 		
 		
 		// 키워드로 검색--------------------------------------------
-		List<MovieDto> keyword = searchService.searchByKeyword(keywords);
+		List<MovieDto> keyword = searchService.searchByKeyword(keywords, 1);
 		model.addAttribute("keyword", keyword);
 		
 		// 일부 일치하는 항목 검색----------------------------------------
 		if(keywords.length > 1) {
 			// 제목 일부만 일치하는 항목 검색--------------------------------------------
-			List<MovieDto> titlePart = searchService.searchByPartOfTitle(keywords);
+			List<MovieDto> titlePart = searchService.searchByPartOfTitle(keywords, 1);
 			model.addAttribute("titlePart", titlePart);
 			
 			// 키워드 절반만 일치하는 항목 검색--------------------------------------------
-			List<MovieDto> keywordHalf = searchService.searchByHalfKeyword(keywords);
+			List<MovieDto> keywordHalf = searchService.searchByHalfKeyword(keywords, 1);
 			model.addAttribute("keywordHalf", keywordHalf);
 		}
 

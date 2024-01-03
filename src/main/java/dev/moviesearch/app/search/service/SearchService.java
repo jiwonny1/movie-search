@@ -10,8 +10,8 @@ public interface SearchService {
 	void deleteRecentSearch(SearchLogDto searchLogDto);
 	void insertRecentSearch(List<SearchLogDto> data);
 	
-	List<MovieDto> searchByTitle(String[] keywords);
-	List<MovieDto> searchByPartOfTitle(String[] keywords);
-	List<MovieDto> searchByKeyword(String[] keywords);
-	List<MovieDto> searchByHalfKeyword(String[] keywords);
+	List<MovieDto> searchByTitle(String[] keywords, int page);
+	List<MovieDto> searchByPartOfTitle(String[] keywords, int page);
+	List<MovieDto> searchByKeyword(String[] keywords, int page);
+	List<MovieDto> searchByHalfKeyword(String[] keywords, int page);
 }

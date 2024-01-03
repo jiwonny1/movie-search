@@ -14,9 +14,9 @@ public interface SearchMapper {
 	void deleteRecentSearch(SearchLogDto searchLogDto);
 	void insertRecentSearch(List<SearchLogDto> data);
 	
-	List<MovieDto> selectByTitle(String[] keywords);
-	List<MovieDto> selectByPartOfTitle(String[] keywords);
-	List<MovieDto> selectByKeyword(Map<String, Object> keywords);
-	List<MovieDto> selectByHalfKeyword(Map<String, Object> keywords);
+	List<MovieDto> selectByTitle(Map<String, Object> data);
+	List<MovieDto> selectByPartOfTitle(Map<String, Object> data);
+	List<MovieDto> selectByKeyword(Map<String, Object> data);
+	List<MovieDto> selectByHalfKeyword(Map<String, Object> data);
 	
 }

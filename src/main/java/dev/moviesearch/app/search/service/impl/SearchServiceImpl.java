@@ -38,28 +38,38 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@Override
-	public List<MovieDto> searchByTitle(String[] keywords) {
-		return searchMapper.selectByTitle(keywords);
+	public List<MovieDto> searchByTitle(String[] keywords, int page) {
+		List<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
+		Map<String, Object> data = new HashMap<>();
+		data.put("keywords", keywordList);
+		data.put("page", page);
+		return searchMapper.selectByTitle(data);
 	}
 	
 	@Override
-	public List<MovieDto> searchByPartOfTitle(String[] keywords) {
-		return searchMapper.selectByPartOfTitle(keywords);
+	public List<MovieDto> searchByPartOfTitle(String[] keywords, int page) {
+		List<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
+		Map<String, Object> data = new HashMap<>();
+		data.put("keywords", keywordList);
+		data.put("page", page);
+		return searchMapper.selectByPartOfTitle(data);
 	}
 
 	@Override
-	public List<MovieDto> searchByKeyword(String[] keywords) {
+	public List<MovieDto> searchByKeyword(String[] keywords, int page) {
 		List<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
 		Map<String, Object> data = new HashMap<>();
-		data.put("list", keywordList);
+		data.put("keywords", keywordList);
+		data.put("page", page);
 		return searchMapper.selectByKeyword(data);
 	}
 	
 	@Override
-	public List<MovieDto> searchByHalfKeyword(String[] keywords) {
+	public List<MovieDto> searchByHalfKeyword(String[] keywords, int page) {
 		List<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
 		Map<String, Object> data = new HashMap<>();
-		data.put("list", keywordList);
+		data.put("keywords", keywordList);
+		data.put("page", page);
 		return searchMapper.selectByHalfKeyword(data);
 	}
 
