@@ -116,30 +116,30 @@
    			movie.CONTENT C
    		WHERE
    			C.CONTENT_ID IN 
-   			(
-   			SELECT DISTINCT A.CONTENT_ID FROM 
-				movie.KEYWORD A
-			INNER JOIN
-				(
-				SELECT 
-					CONTENT_ID, COUNT(CONTENT_ID) COUNT 
-				FROM 
-					movie.KEYWORD 
-				WHERE 
-					KEYWORD IN
+	   			(
+	   			SELECT DISTINCT A.CONTENT_ID FROM 
+					movie.KEYWORD A
+				INNER JOIN
 					(
-					<foreach collection="list" item="keyword" separator=" , ">
-		   				#{keyword}
-		   			</foreach>
-					) 
-				GROUP BY 
-					CONTENT_ID 
-				) B
-			ON 
-				B.CONTENT_ID = A.CONTENT_ID
-			WHERE
-				B.COUNT = ${list.size()}
-			)
+					SELECT 
+						CONTENT_ID, COUNT(CONTENT_ID) COUNT 
+					FROM 
+						movie.KEYWORD 
+					WHERE 
+						KEYWORD IN
+						(
+						<foreach collection="list" item="keyword" separator=" , ">
+			   				#{keyword}
+			   			</foreach>
+						) 
+					GROUP BY 
+						CONTENT_ID 
+					) B
+				ON 
+					B.CONTENT_ID = A.CONTENT_ID
+				WHERE
+					B.COUNT = ${list.size()}
+				)
 		ORDER BY
    			C.POPULARITY DESC
    	</select>
@@ -158,30 +158,56 @@
    			movie.CONTENT C
    		WHERE
    			C.CONTENT_ID IN 
-   			(
-   			SELECT DISTINCT A.CONTENT_ID FROM 
-				movie.KEYWORD A
-			INNER JOIN
-				(
-				SELECT 
-					CONTENT_ID, COUNT(CONTENT_ID) COUNT 
-				FROM 
-					movie.KEYWORD 
-				WHERE 
-					KEYWORD IN
+	   			(
+	   			SELECT DISTINCT A.CONTENT_ID FROM 
+					movie.KEYWORD A
+				INNER JOIN
 					(
-					<foreach collection="list" item="keyword" separator=" , ">
-		   				#{keyword}
-		   			</foreach>
-					) 
-				GROUP BY 
-					CONTENT_ID 
-				) B
-			ON 
-				B.CONTENT_ID = A.CONTENT_ID
-			WHERE
-				B.COUNT = ${list.size() / 2}
-			)
+					SELECT 
+						CONTENT_ID, COUNT(CONTENT_ID) COUNT 
+					FROM 
+						movie.KEYWORD 
+					WHERE 
+						KEYWORD IN
+						(
+						<foreach collection="list" item="keyword" separator=" , ">
+			   				#{keyword}
+			   			</foreach>
+						) 
+					GROUP BY 
+						CONTENT_ID 
+					) B
+				ON 
+					B.CONTENT_ID = A.CONTENT_ID
+				WHERE
+					B.COUNT <![CDATA[<]]>  ${list.size()}
+				)
+			AND
+			C.CONTENT_ID NOT IN
+				(
+	   			SELECT DISTINCT A.CONTENT_ID FROM 
+					movie.KEYWORD A
+				INNER JOIN
+					(
+					SELECT 
+						CONTENT_ID, COUNT(CONTENT_ID) COUNT 
+					FROM 
+						movie.KEYWORD 
+					WHERE 
+						KEYWORD IN
+						(
+						<foreach collection="list" item="keyword" separator=" , ">
+			   				#{keyword}
+			   			</foreach>
+						) 
+					GROUP BY 
+						CONTENT_ID 
+					) B
+				ON 
+					B.CONTENT_ID = A.CONTENT_ID
+				WHERE
+					B.COUNT = ${list.size()}
+				)
 		ORDER BY
    			C.POPULARITY DESC
    	</select>
