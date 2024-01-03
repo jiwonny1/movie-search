@@ -41,6 +41,11 @@ public class SearchServiceImpl implements SearchService {
 	public List<MovieDto> searchByTitle(String[] keywords) {
 		return searchMapper.selectByTitle(keywords);
 	}
+	
+	@Override
+	public List<MovieDto> searchByPartOfTitle(String[] keywords) {
+		return searchMapper.selectByPartOfTitle(keywords);
+	}
 
 	@Override
 	public List<MovieDto> searchByKeyword(String[] keywords) {
@@ -48,6 +53,14 @@ public class SearchServiceImpl implements SearchService {
 		Map<String, Object> data = new HashMap<>();
 		data.put("list", keywordList);
 		return searchMapper.selectByKeyword(data);
+	}
+	
+	@Override
+	public List<MovieDto> searchByHalfKeyword(String[] keywords) {
+		List<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
+		Map<String, Object> data = new HashMap<>();
+		data.put("list", keywordList);
+		return searchMapper.selectByHalfKeyword(data);
 	}
 
 }
