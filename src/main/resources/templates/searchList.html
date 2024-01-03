@@ -27,6 +27,9 @@
 	    		<div th:each="list, state : ${title}" th:if="${state.count <= 6}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
 	    			<a th:href="@{|movie/${list.id}|}" class="text-black">
 		    			<div class="card-img-top overflow-hidden">
+		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
+							   	<p th:text="${list.overview}">소개글</p>
+	    					</div>
 							<img th:src="@{|https://image.tmdb.org/t/p/w500${list.posterPath}|}" class="card-img-top" alt="영화 포스터">
 		    			</div>
 						<div class="card-body">
@@ -59,6 +62,9 @@
 	    		<div th:each="list, state : ${titlePart}" th:if="${state.count <= 6}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
 	    			<a th:href="@{|movie/${list.id}|}" class="text-black">
 		    			<div class="card-img-top overflow-hidden">
+		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
+							   	<p th:text="${list.overview}">소개글</p>
+	    					</div>
 							<img th:src="@{|https://image.tmdb.org/t/p/w500${list.posterPath}|}" class="card-img-top" alt="영화 포스터">
 		    			</div>
 						<div class="card-body">
@@ -92,6 +98,9 @@
 	    		<div th:each="list, state : ${keyword}" th:if="${state.count <= 6}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
 	    			<a th:href="@{|movie/${list.id}|}" class="text-black">
 		    			<div class="card-img-top overflow-hidden">
+		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
+							   	<p th:text="${list.overview}">소개글</p>
+	    					</div>
 							<img th:src="@{|https://image.tmdb.org/t/p/w500${list.posterPath}|}" class="card-img-top" alt="영화 포스터">
 		    			</div>
 						<div class="card-body">
@@ -124,6 +133,9 @@
 	    		<div th:each="list, state : ${keywordHalf}" th:if="${state.count <= 6}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
 	    			<a th:href="@{|movie/${list.id}|}" class="text-black">
 		    			<div class="card-img-top overflow-hidden">
+		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
+							   	<p th:text="${list.overview}">소개글</p>
+	    					</div>
 							<img th:src="@{|https://image.tmdb.org/t/p/w500${list.posterPath}|}" class="card-img-top" alt="영화 포스터">
 		    			</div>
 						<div class="card-body">

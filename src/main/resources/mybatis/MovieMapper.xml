@@ -10,6 +10,7 @@
 	    		TITLE,
 	    		RELEASE_DATE,
 	    		POSTER_PATH,
+	    		OVERVIEW,
 	    		ORIGINAL_LANGUAGE,
 	    		POPULARITY,
 	    		VOTE_AVERAGE,
@@ -22,6 +23,7 @@
 		    	#{item.title},
 		    	#{item.releaseDate},
 		   		#{item.posterPath},
+		   		#{item.overview},
 		   		#{item.originalLanguage},
 		   		#{item.popularity},
 		   		#{item.voteAverage},
@@ -31,6 +33,7 @@
     	ON DUPLICATE KEY UPDATE
 	    	POPULARITY = values(POPULARITY),
 	    	VOTE_AVERAGE = values(VOTE_AVERAGE),
+	    	OVERVIEW = values(OVERVIEW),
 	    	VOTE_COUNT = values(VOTE_COUNT)
     	;
     	

@@ -43,6 +43,24 @@ main .movieCard {
 	cursor: pointer;
 }
 main .movieCard:hover img {
-	filter: blur(8px) brightness(0.5);
-  	-webkit-filter: blur(8px) brightness(0.5);
+	filter: blur(8px) brightness(0.3);
+  	-webkit-filter: blur(8px) brightness(0.3);
+}
+
+main .overview {
+	display: none;
+}
+main .movieCard:hover .overview {
+	display: block;
+}
+
+main .overview p {
+  	display: -webkit-box;
+	white-space: break-spaces;
+    -webkit-line-clamp: 9;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    color: white;
 }
