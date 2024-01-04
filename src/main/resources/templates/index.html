@@ -41,7 +41,7 @@
     		</div>
     		<div class="cardContainer ">
 	    		<div th:each="list : ${trend.results}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
-	    			<a th:href="@{|movie/${list.id}|}" class="text-black">
+	    			<a th:href="@{|/post/detail/${list.id}|}" class="text-black">
 		    			<div class="card-img-top overflow-hidden position-relative">
 		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
 							   	<p th:text="${list.overview}">소개글</p>
@@ -71,7 +71,7 @@
     		<!-- 쓰기전에 위에꺼 복붙하고 사용할것 -->
     		<div class="cardContainer ">
 	    		<div th:each="list : ${recentRelease.results}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
-	    			<a th:href="@{|movie/${list.id}|}" class="text-black">
+	    			<a th:href="@{|/post/detail/${list.id}|}" class="text-black">
 		    			<div class="card-img-top overflow-hidden">
 		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
 							   	<p th:text="${list.overview}">소개글</p>

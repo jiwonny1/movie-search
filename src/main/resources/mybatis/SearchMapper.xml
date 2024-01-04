@@ -60,7 +60,7 @@
    		ORDER BY
    			POPULARITY DESC
    		LIMIT
-   			${(page * 20) - 20}, ${(page * 20) - 1}
+   			${(page * 20) - 20}, 20
    	</select>
    	
    	<select id="selectByPartOfTitle" parameterType="map" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
@@ -105,7 +105,7 @@
 		ORDER BY
    			POPULARITY DESC
    		LIMIT
-   			${(page * 20) - 20}, ${(page * 20) - 1}
+   			${(page * 20) - 20}, 20
    	</select>
    	
    	<select id="selectByKeyword" parameterType="map" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
@@ -150,7 +150,7 @@
 		ORDER BY
    			C.POPULARITY DESC
    		LIMIT
-   			${(page * 20) - 20}, ${(page * 20) - 1}
+   			${(page * 20) - 20}, 20
    	</select>
    	
    	<select id="selectByHalfKeyword" parameterType="map" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
@@ -221,7 +221,7 @@
 		ORDER BY
    			C.POPULARITY DESC
    		LIMIT
-   			${(page * 20) - 20}, ${(page * 20) - 1}
+   			${(page * 20) - 20}, 20
    	</select>
     
 

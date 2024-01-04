@@ -6,13 +6,12 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import dev.moviesearch.app.movieapi.domain.MovieDto;
-import dev.moviesearch.app.movieapi.domain.MovieListDto;
-import dev.moviesearch.app.movieapi.service.MovieService;
 import dev.moviesearch.app.search.domain.SearchLogDto;
 import dev.moviesearch.app.search.service.SearchService;
 import jakarta.servlet.http.HttpSession;
@@ -24,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 public class SearchController {
 	
 	private final SearchService searchService;
-	private final MovieService movieService;
 	
 	@GetMapping("")
 	public String search(HttpSession session, String[] keywords, Model model) {
@@ -69,8 +67,70 @@ public class SearchController {
 			List<MovieDto> keywordHalf = searchService.searchByHalfKeyword(keywords, 1);
 			model.addAttribute("keywordHalf", keywordHalf);
 		}
-
+		
+		// 링크로 설정할 파마리터 문자열 생성
+		StringBuilder sb = new StringBuilder();
+		for(String word : keywords) {
+			sb.append("keywords=");
+			sb.append(word);
+			sb.append("&");
+		}
+		sb.deleteCharAt(sb.length()-1);
+		model.addAttribute("keywords", sb.toString());
+		
 		return "searchList";
+	}
+	
+	@GetMapping("/detail/{type}")
+	public String searchDetail(@PathVariable String type, String[] keywords, Model model) {
+		List<MovieDto> movies = null;
+		
+		switch (type) {
+		case "t": 
+			movies = searchService.searchByTitle(keywords, 1);
+			break;
+		case "ts":
+			movies = searchService.searchByPartOfTitle(keywords, 1);
+			break;
+		case "k":
+			movies = searchService.searchByKeyword(keywords, 1);			
+			break;
+		case "ks":
+			movies = searchService.searchByHalfKeyword(keywords, 1);
+			break;
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + type);
+		}
+		
+		model.addAttribute("movies", movies);
+		
+		return "searchDetail";
+	}
+	
+	@PostMapping("/detail/{type}")
+	public String searchDetailList(@PathVariable String type, String[] keywords, int page, Model model) {
+		List<MovieDto> movies = null;
+		
+		switch (type) {
+		case "t": 
+			movies = searchService.searchByTitle(keywords, page);
+			break;
+		case "ts":
+			movies = searchService.searchByPartOfTitle(keywords, page);
+			break;
+		case "k":
+			movies = searchService.searchByKeyword(keywords, page);			
+			break;
+		case "ks":
+			movies = searchService.searchByHalfKeyword(keywords, page);
+			break;
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + type);
+		}
+		
+		model.addAttribute("movies", movies);
+		
+		return "movies";
 	}
 	
 	@PostMapping("/deleteRecentSearch")

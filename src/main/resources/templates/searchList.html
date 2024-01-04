@@ -5,7 +5,6 @@
       layout:decorate="~{layouts/layout}">
       
 <th:block layout:fragment="script">
-	<script th:src="@{/js/index.js}" type="text/javascript"></script>
 </th:block>
 
 <th:block layout:fragment="css">
@@ -16,7 +15,7 @@
 <div layout:fragment="content">
     <main>
     	<!-- 조건 하나씩 추가해야 함 -->
-    	<h1 th:if="${ title.size() == 0 && keyword.size() == 0 && (keywordHalf == null || keywordHalf.size() == 0) }">검색 결과가 없습니다.</h1>
+    	<h1 th:if="${ title.size() == 0 && (titlePart == null || titlePart.size() == 0) && keyword.size() == 0 && (keywordHalf == null || keywordHalf.size() == 0) }">검색 결과가 없습니다.</h1>
     	
     	<div th:if="${title.size() > 0}" class="titleResultContainer text-nowrap mt-3 mx-3">
     		<div class="chartTitle">
@@ -25,7 +24,7 @@
     		</div>
     		<div class="cardContainer ">
 	    		<div th:each="list, state : ${title}" th:if="${state.count <= 6}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
-	    			<a th:href="@{|movie/${list.id}|}" class="text-black">
+	    			<a th:href="@{|/post/detail/${list.id}|}" class="text-black">
 		    			<div class="card-img-top overflow-hidden">
 		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
 							   	<p th:text="${list.overview}">소개글</p>
@@ -44,11 +43,13 @@
 						</div>
 					</a>
 				</div>
-				<button th:if="${title.size() > 6}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-						<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
-					</svg>
-				</button>
+				<a th:href="@{|/search/detail/t?${keywords}|}">
+					<button th:if="${title.size() > 6}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+							<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+						</svg>
+					</button>
+				</a>
 			</div>
 			
     	</div>
@@ -60,7 +61,7 @@
     		</div>
     		<div class="cardContainer ">
 	    		<div th:each="list, state : ${titlePart}" th:if="${state.count <= 6}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
-	    			<a th:href="@{|movie/${list.id}|}" class="text-black">
+	    			<a th:href="@{|/post/detail/${list.id}|}" class="text-black">
 		    			<div class="card-img-top overflow-hidden">
 		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
 							   	<p th:text="${list.overview}">소개글</p>
@@ -79,11 +80,13 @@
 						</div>
 					</a>
 				</div>
-				<button th:if="${titlePart != null && titlePart.size() > 6}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-						<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
-					</svg>
-				</button>
+				<a th:href="@{|/search/detail/ts?${keywords}|}">
+					<button th:if="${titlePart != null && titlePart.size() > 6}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+							<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+						</svg>
+					</button>
+				</a>
 			</div>
 			
     	</div>
@@ -96,7 +99,7 @@
     		</div>
     		<div class="cardContainer ">
 	    		<div th:each="list, state : ${keyword}" th:if="${state.count <= 6}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
-	    			<a th:href="@{|movie/${list.id}|}" class="text-black">
+	    			<a th:href="@{|/post/detail/${list.id}|}" class="text-black">
 		    			<div class="card-img-top overflow-hidden">
 		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
 							   	<p th:text="${list.overview}">소개글</p>
@@ -115,11 +118,13 @@
 						</div>
 					</a>
 				</div>
-				<button th:if="${keyword.size() > 6}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-						<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
-					</svg>
-				</button>
+				<a th:href="@{|/search/detail/k?${keywords}|}">
+					<button th:if="${keyword.size() > 6}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+							<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+						</svg>
+					</button>
+				</a>
 			</div>
 			
     	</div>
@@ -131,7 +136,7 @@
     		</div>
     		<div class="cardContainer ">
 	    		<div th:each="list, state : ${keywordHalf}" th:if="${state.count <= 6}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
-	    			<a th:href="@{|movie/${list.id}|}" class="text-black">
+	    			<a th:href="@{|/post/detail/${list.id}|}" class="text-black">
 		    			<div class="card-img-top overflow-hidden">
 		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
 							   	<p th:text="${list.overview}">소개글</p>
@@ -150,11 +155,13 @@
 						</div>
 					</a>
 				</div>
-				<button th:if="${keywordHalf.size() > 6}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-						<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
-					</svg>
-				</button>
+				<a th:href="@{|/search/detail/ks?${keywords}|}">
+					<button th:if="${keywordHalf.size() > 6}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+							<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+						</svg>
+					</button>
+				</a>
 			</div>
 			
     	</div>
