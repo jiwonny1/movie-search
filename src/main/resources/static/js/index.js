@@ -19,7 +19,15 @@ function eventOn() {
 	$("button.search").on("click", function() {
 		search();
 	})
+	
+	// 검색창에서 엔터 입력
+	$(".searchInput").on("keyup", function(e) {
+		if(e.keyCode==13) {
+			search();
+		}
+	})
 }
+
 
 // 로직 실행 함수들------------------------------------------------------
 
