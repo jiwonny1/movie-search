@@ -20,9 +20,17 @@ function eventOn() {
 		search();
 	})
 	
-	// 검색창에서 엔터 입력
+	// 검색창에서 엔터로 submit 방지
+	$(".searchInput").on("keydown", function(e) {
+		if(e.keyCode==13) {
+			e.preventDefault();
+		}
+	})
+	
+	// 검색창에서 엔터 입력으로 검색
 	$(".searchInput").on("keyup", function(e) {
 		if(e.keyCode==13) {
+			e.preventDefault();
 			search();
 		}
 	})
@@ -50,8 +58,10 @@ function appendKeyword(clickedObject) {
 	let $input = $("input.searchInput");
 	let beforeKeywords = $input.val().trim();
 	let afterKeywords;
-
-	if(beforeKeywords.length == 0 || beforeKeywords.charAt(beforeKeywords.length - 1) == ",")
+	
+	if(beforeKeywords.length == 0)
+		afterKeywords = beforeKeywords + keyword;
+	else if(beforeKeywords.charAt(beforeKeywords.length - 1) == ",")
 		afterKeywords = beforeKeywords + " " + keyword;
 	else 
 		afterKeywords = beforeKeywords + ", " + keyword;
@@ -65,6 +75,7 @@ function search() {
 	
 	for(raw of rawInput) {
 		let keyword = raw.trim();
+		console.log("--" + keyword + "--");
 		if(keyword.length == 0) continue;
 		if($("form input[value='" + keyword + "']").length == 0)
 			$("form").append($('<input/>', {type: 'hidden', name: 'keywords', value: keyword }));
