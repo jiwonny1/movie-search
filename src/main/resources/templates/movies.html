@@ -4,7 +4,8 @@
     		<div class="overview p-3 position-absolute z-1 h-100 w-100">
 				<p th:text="${movie.overview}">소개글</p>
  			</div>
-			<img th:src="@{|https://image.tmdb.org/t/p/w500${movie.posterPath}|}" class="card-img-top" alt="영화 포스터">
+			<img th:if="${movie.posterPath != null}" th:src="@{|https://image.tmdb.org/t/p/w500${movie.posterPath}|}" class="card-img-top" alt="영화 포스터">
+			<img th:if="${movie.posterPath == null}" th:src="@{/images/emptyPoster.png}" class="card-img-top" alt="영화 포스터">
     	</div>
 		<div class="card-body">
 			<span th:text="${movie.title}" class="d-block mb-3 text-wrap lh-1 fs-6 fw-bold">영화 제목</span>
