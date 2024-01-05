@@ -1,7 +1,5 @@
 package dev.moviesearch.app.search.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -37,42 +35,22 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@Override
-	public List<MovieDto> searchByTitle(String[] keywords, int page) {
-		List<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
-		SearchConditionDto param = SearchConditionDto.builder()
-													 .keywords(keywordList)
-													 .page(page)
-													 .build();
+	public List<MovieDto> searchByTitle(SearchConditionDto param) {
 		return searchMapper.selectByTitle(param);
 	}
 	
 	@Override
-	public List<MovieDto> searchByPartOfTitle(String[] keywords, int page) {
-		List<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
-		SearchConditionDto param = SearchConditionDto.builder()
-													 .keywords(keywordList)
-													 .page(page)
-													 .build();
+	public List<MovieDto> searchByPartOfTitle(SearchConditionDto param) {
 		return searchMapper.selectByPartOfTitle(param);
 	}
 
 	@Override
-	public List<MovieDto> searchByKeyword(String[] keywords, int page) {
-		List<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
-		SearchConditionDto param = SearchConditionDto.builder()
-													 .keywords(keywordList)
-													 .page(page)
-													 .build();
+	public List<MovieDto> searchByKeyword(SearchConditionDto param) {
 		return searchMapper.selectByKeyword(param);
 	}
 	
 	@Override
-	public List<MovieDto> searchByHalfKeyword(String[] keywords, int page) {
-		List<String> keywordList = new ArrayList<String>(Arrays.asList(keywords));
-		SearchConditionDto param = SearchConditionDto.builder()
-													 .keywords(keywordList)
-													 .page(page)
-													 .build();
+	public List<MovieDto> searchByHalfKeyword(SearchConditionDto param) {
 		return searchMapper.selectByHalfKeyword(param);
 	}
 

@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import dev.moviesearch.app.movieapi.domain.MovieDto;
+import dev.moviesearch.app.search.domain.SearchConditionDto;
 import dev.moviesearch.app.search.domain.SearchLogDto;
 import dev.moviesearch.app.search.service.SearchService;
 import jakarta.servlet.http.HttpSession;
@@ -24,8 +26,9 @@ public class SearchController {
 	
 	private final SearchService searchService;
 	
+	
 	@GetMapping("")
-	public String search(HttpSession session, String[] keywords, Model model) {
+	public String search(HttpSession session, @RequestParam("keywords") List<String> keywords, Model model) {
 		
 		String userId = (String)session.getAttribute("user");
 		
@@ -33,6 +36,11 @@ public class SearchController {
 //		MovieListDto trend = movieService.getPopularMovieList(1);
 //		model.addAttribute("trend", trend);
 //		//---------------------------------------------------------------
+		
+		SearchConditionDto param = SearchConditionDto.builder()
+													 .keywords(keywords)
+													 .page(1)
+													 .build();
 		
 		// 로그 등록----------------------------------------------
 		if(userId != null) {
@@ -47,24 +55,24 @@ public class SearchController {
 		}
 		
 		// 제목으로 검색--------------------------------------------
-		List<MovieDto> title = searchService.searchByTitle(keywords, 1);
+		List<MovieDto> title = searchService.searchByTitle(param);
 		model.addAttribute("title", title);
 		
 		
 		
 		
 		// 키워드로 검색--------------------------------------------
-		List<MovieDto> keyword = searchService.searchByKeyword(keywords, 1);
+		List<MovieDto> keyword = searchService.searchByKeyword(param);
 		model.addAttribute("keyword", keyword);
 		
 		// 일부 일치하는 항목 검색----------------------------------------
-		if(keywords.length > 1) {
+		if(keywords.size() > 1) {
 			// 제목 일부만 일치하는 항목 검색--------------------------------------------
-			List<MovieDto> titlePart = searchService.searchByPartOfTitle(keywords, 1);
+			List<MovieDto> titlePart = searchService.searchByPartOfTitle(param);
 			model.addAttribute("titlePart", titlePart);
 			
 			// 키워드 절반만 일치하는 항목 검색--------------------------------------------
-			List<MovieDto> keywordHalf = searchService.searchByHalfKeyword(keywords, 1);
+			List<MovieDto> keywordHalf = searchService.searchByHalfKeyword(param);
 			model.addAttribute("keywordHalf", keywordHalf);
 		}
 		
@@ -81,22 +89,33 @@ public class SearchController {
 		return "searchList";
 	}
 	
+	// 왜 Dto안에 List로는 파라미터가 자동으로 안들어가는건가....
 	@GetMapping("/detail/{type}")
-	public String searchDetail(@PathVariable String type, String[] keywords, Model model) {
+	public String searchDetail( @PathVariable String type, 
+								@RequestParam(required = true, name = "keywords") List<String> keywords, 
+								@RequestParam(required = false, name = "genreIds") List<Integer> genreIds,
+								@RequestParam(required = false, defaultValue = "1") int page,
+								@RequestParam(required = false) String orderBy, 
+								@RequestParam(required = false) String startMonth,
+								@RequestParam(required = false) String endMonth,
+								@RequestParam(required = false) String originalLanguage, 
+								Model model) {
 		List<MovieDto> movies = null;
+		
+		SearchConditionDto param = new SearchConditionDto(keywords, genreIds, page, orderBy, startMonth, endMonth, originalLanguage);
 		
 		switch (type) {
 		case "t": 
-			movies = searchService.searchByTitle(keywords, 1);
+			movies = searchService.searchByTitle(param);
 			break;
 		case "ts":
-			movies = searchService.searchByPartOfTitle(keywords, 1);
+			movies = searchService.searchByPartOfTitle(param);
 			break;
 		case "k":
-			movies = searchService.searchByKeyword(keywords, 1);			
+			movies = searchService.searchByKeyword(param);			
 			break;
 		case "ks":
-			movies = searchService.searchByHalfKeyword(keywords, 1);
+			movies = searchService.searchByHalfKeyword(param);
 			break;
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + type);
@@ -108,21 +127,31 @@ public class SearchController {
 	}
 	
 	@PostMapping("/detail/{type}")
-	public String searchDetailList(@PathVariable String type, String[] keywords, int page, Model model) {
+	public String searchDetailList( @PathVariable String type, 
+									@RequestParam(required = true, name = "keywords") List<String> keywords, 
+									@RequestParam(required = false, name = "genreIds") List<Integer> genreIds,
+									@RequestParam(required = false, defaultValue = "1") int page,
+									@RequestParam(required = false) String orderBy, 
+									@RequestParam(required = false) String startMonth,
+									@RequestParam(required = false) String endMonth,
+									@RequestParam(required = false) String originalLanguage, 
+									Model model) {
 		List<MovieDto> movies = null;
+		
+		SearchConditionDto param = new SearchConditionDto(keywords, genreIds, page, orderBy, startMonth, endMonth, originalLanguage);
 		
 		switch (type) {
 		case "t": 
-			movies = searchService.searchByTitle(keywords, page);
+			movies = searchService.searchByTitle(param);
 			break;
 		case "ts":
-			movies = searchService.searchByPartOfTitle(keywords, page);
+			movies = searchService.searchByPartOfTitle(param);
 			break;
 		case "k":
-			movies = searchService.searchByKeyword(keywords, page);			
+			movies = searchService.searchByKeyword(param);			
 			break;
 		case "ks":
-			movies = searchService.searchByHalfKeyword(keywords, page);
+			movies = searchService.searchByHalfKeyword(param);
 			break;
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + type);
