@@ -39,7 +39,7 @@
     </insert>
 
 
-	<select id="selectByTitle" parameterType="map" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
+	<select id="selectByTitle" parameterType="dev.moviesearch.app.search.domain.SearchConditionDto" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
    		SELECT 
    			CONTENT_ID ID,
    			TITLE,
@@ -63,7 +63,7 @@
    			${(page * 20) - 20}, 20
    	</select>
    	
-   	<select id="selectByPartOfTitle" parameterType="map" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
+   	<select id="selectByPartOfTitle" parameterType="dev.moviesearch.app.search.domain.SearchConditionDto" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
    		SELECT 
    			CONTENT_ID ID,
    			TITLE,
@@ -108,7 +108,7 @@
    			${(page * 20) - 20}, 20
    	</select>
    	
-   	<select id="selectByKeyword" parameterType="map" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
+   	<select id="selectByKeyword" parameterType="dev.moviesearch.app.search.domain.SearchConditionDto" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
    		SELECT 
    			C.CONTENT_ID ID,
    			C.TITLE,
@@ -153,7 +153,7 @@
    			${(page * 20) - 20}, 20
    	</select>
    	
-   	<select id="selectByHalfKeyword" parameterType="map" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
+   	<select id="selectByHalfKeyword" parameterType="dev.moviesearch.app.search.domain.SearchConditionDto" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
    		SELECT 
    			C.CONTENT_ID ID,
    			C.TITLE,
