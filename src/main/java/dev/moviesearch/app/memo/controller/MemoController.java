@@ -2,6 +2,11 @@ package dev.moviesearch.app.memo.controller;
 
 import dev.moviesearch.app.memo.domain.MemoDto;
 import dev.moviesearch.app.memo.service.MemoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,15 +25,20 @@ public class MemoController {
 	@Autowired
 	private MemoService memoService;
 
+	@Operation(summary = "영화 목록", description = "영화목록 입니다.")
 	@GetMapping("/hello")
 	public String hello(Model model) {
 		model.addAttribute("name", "world!");
 		return "hello";
 	}
 
+
 	/**
 	 * jsp 파일 없이 화면에 json type 으로 값을 뿌리는 방법
 	 */
+	@Operation(summary = "메모 목록 Sample Code", description = "ResponseEntity 를 이용하여 메모 목록을 보여주는 코드")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MemoDto.class))) })
 	@GetMapping("/sample")
 	public ResponseEntity<List<MemoDto>> sample() {
 		List<MemoDto> memoList = memoService.findMemoList();
@@ -39,12 +49,16 @@ public class MemoController {
 	 * 위와 같은 결과
 	 * @return
 	 */
+	@Operation(summary = "메모 목록 Sample Code", description = "ResponseBody 를 이용하여 메모 목록을 보여주는 코드")
 	@GetMapping("/sample2")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MemoDto.class))) })
 	@ResponseBody
 	public List<MemoDto> sample2() {
 		return memoService.findMemoList();
 	}
 
+	@Operation(summary = "세션 처리 Sample Code", description = "세션 처리에 대한 예제를 보여주는 코드")
 	@GetMapping("/session")
 	public String session(Model model, HttpSession session) {
 		session.setAttribute("userId", "Goosia");
@@ -56,6 +70,7 @@ public class MemoController {
 	}
 
 	// 메모 목록
+	@Operation(summary = "메모 목록 Sample Code", description = "Model 을 이용하여 메모 목록을 보여주는 코드")
 	@GetMapping("/")
 	public String index(Model model) {
 		model.addAttribute("memos", memoService.findMemoList());
@@ -63,6 +78,7 @@ public class MemoController {
 	}
 
 	// 메모 목록 2
+	@Operation(summary = "목록 코드", description = "/memo 접근 시 / 로 리다이렉트 시키는 코드")
 	@GetMapping("/memo")
 	public String listMemo() {
 		return "redirect:/";
