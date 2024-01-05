@@ -41,43 +41,95 @@
 
 	<select id="selectByTitle" parameterType="dev.moviesearch.app.search.domain.SearchConditionDto" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
    		SELECT 
-   			CONTENT_ID ID,
-   			TITLE,
-   			RELEASE_DATE,
-   			POSTER_PATH,
-   			OVERVIEW,
-   			ORIGINAL_LANGUAGE,
-   			POPULARITY,
-   			VOTE_AVERAGE,
-   			VOTE_COUNT
+   			C.CONTENT_ID ID,
+   			C.TITLE,
+   			C.RELEASE_DATE,
+   			C.POSTER_PATH,
+   			C.OVERVIEW,
+   			C.ORIGINAL_LANGUAGE,
+   			C.POPULARITY,
+   			C.VOTE_AVERAGE,
+   			C.VOTE_COUNT
    		FROM
-   			movie.CONTENT
+   			movie.CONTENT C
+   		<if test="genreIds != null">
+   			INNER JOIN 
+   				(
+	   				SELECT 
+	   					CONTENT_ID, COUNT(CONTENT_ID) COUNT 
+	   				FROM 
+	   					movie.CONTENT_GENRE 
+	   				WHERE 
+	   					GENRE_ID IN 
+	   				<foreach collection="genreIds" item="genreId" open="(" close=")" separator=" , ">#{genreId}</foreach>
+	   				GROUP BY 
+	   					CONTENT_ID 
+   				) G 
+   			ON G.CONTENT_ID = C.CONTENT_ID
+   		</if>
    		<where>
    			<foreach collection="keywords" item="keyword" separator=" and ">
-   				TITLE like concat('%', #{keyword}, '%')
+   				C.TITLE like concat('%', #{keyword}, '%')
    			</foreach>
+   			<if test="startMonth != null">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[>=]]> DATE_FORMAT(now(), #{startMonth})
+   			</if>
+   			<if test="endMonth != null">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[<=]]> DATE_FORMAT(now(), #{endMonth})
+   			</if>
+   			<if test="originalLanguage != null">
+   				AND C.ORIGINAL_LANGUAGE = #{originalLanguage}
+   			</if>
+   			<if test="genreIds != null">
+				AND G.COUNT = ${genreIds.size()}
+   			</if>
    		</where>
    		ORDER BY
-   			POPULARITY DESC
+   			<if test="orderBy != null">
+	   			<if test="orderBy == 'RA'">C.RELEASE_DATE ASC, </if>
+	   			<if test="orderBy == 'RD'">C.RELEASE_DATE DESC, </if>
+	   			<if test="orderBy == 'CA'">C.VOTE_COUNT ASC, </if>
+	   			<if test="orderBy == 'CD'">C.VOTE_COUNT DESC, </if>
+	   			<if test="orderBy == 'TA'">C.TITLE ASC, </if>
+	   			<if test="orderBy == 'TD'">C.TITLE DESC, </if>
+	   			<if test="orderBy == 'PA'">C.POPULARITY ASC, </if>
+   			</if>
+	   		C.POPULARITY DESC
+   			
    		LIMIT
    			${(page * 20) - 20}, 20
    	</select>
    	
    	<select id="selectByPartOfTitle" parameterType="dev.moviesearch.app.search.domain.SearchConditionDto" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
    		SELECT 
-   			CONTENT_ID ID,
-   			TITLE,
-   			RELEASE_DATE,
-   			POSTER_PATH,
-   			OVERVIEW,
-   			ORIGINAL_LANGUAGE,
-   			POPULARITY,
-   			VOTE_AVERAGE,
-   			VOTE_COUNT
+   			C.CONTENT_ID ID,
+   			C.TITLE,
+   			C.RELEASE_DATE,
+   			C.POSTER_PATH,
+   			C.OVERVIEW,
+   			C.ORIGINAL_LANGUAGE,
+   			C.POPULARITY,
+   			C.VOTE_AVERAGE,
+   			C.VOTE_COUNT
    		FROM
-   			movie.CONTENT
+   			movie.CONTENT C
+   		<if test="genreIds != null">
+			INNER JOIN 
+   				(
+	   				SELECT 
+	   					CONTENT_ID, COUNT(CONTENT_ID) COUNT 
+	   				FROM 
+	   					movie.CONTENT_GENRE 
+	   				WHERE 
+	   					GENRE_ID IN 
+	   				<foreach collection="genreIds" item="genreId" open="(" close=")" separator=" , ">#{genreId}</foreach>
+	   				GROUP BY 
+	   					CONTENT_ID 
+   				) G 
+   			ON G.CONTENT_ID = C.CONTENT_ID
+   		</if>
    		WHERE
-   			CONTENT_ID IN 
+   			C.CONTENT_ID IN 
    				(
 		   		SELECT 
 		   			CONTENT_ID
@@ -90,7 +142,7 @@
 		   		</where>
 		   		)
 		   	AND
-   			CONTENT_ID NOT IN 
+   			C.CONTENT_ID NOT IN 
 		   		(
 		   		SELECT 
 		   			CONTENT_ID
@@ -102,8 +154,29 @@
 		   			</foreach>
 		   		</where>
 		   		)
+		 	<if test="startMonth != null">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[>=]]> DATE_FORMAT(now(), #{startMonth})
+   			</if>
+   			<if test="endMonth != null">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[<=]]> DATE_FORMAT(now(), #{endMonth})
+   			</if>
+   			<if test="originalLanguage != null">
+   				AND C.ORIGINAL_LANGUAGE = #{originalLanguage}
+   			</if>
+   			<if test="genreIds != null">
+				AND G.COUNT = ${genreIds.size()}
+   			</if>
 		ORDER BY
-   			POPULARITY DESC
+   			<if test="orderBy != null">
+	   			<if test="orderBy == 'RA'">C.RELEASE_DATE ASC, </if>
+	   			<if test="orderBy == 'RD'">C.RELEASE_DATE DESC, </if>
+	   			<if test="orderBy == 'CA'">C.VOTE_COUNT ASC, </if>
+	   			<if test="orderBy == 'CD'">C.VOTE_COUNT DESC, </if>
+	   			<if test="orderBy == 'TA'">C.TITLE ASC, </if>
+	   			<if test="orderBy == 'TD'">C.TITLE DESC, </if>
+	   			<if test="orderBy == 'PA'">C.POPULARITY ASC, </if>
+   			</if>
+	   		POPULARITY DESC
    		LIMIT
    			${(page * 20) - 20}, 20
    	</select>
@@ -121,6 +194,21 @@
    			C.VOTE_COUNT
    		FROM
    			movie.CONTENT C
+   		<if test="genreIds != null">
+   			INNER JOIN 
+   				(
+	   				SELECT 
+	   					CONTENT_ID, COUNT(CONTENT_ID) COUNT 
+	   				FROM 
+	   					movie.CONTENT_GENRE 
+	   				WHERE 
+	   					GENRE_ID IN 
+	   				<foreach collection="genreIds" item="genreId" open="(" close=")" separator=" , ">#{genreId}</foreach>
+	   				GROUP BY 
+	   					CONTENT_ID 
+   				) G 
+   			ON G.CONTENT_ID = C.CONTENT_ID
+   		</if>
    		WHERE
    			C.CONTENT_ID IN 
 	   			(
@@ -147,8 +235,29 @@
 				WHERE
 					B.COUNT = ${keywords.size()}
 				)
+			<if test="startMonth != null">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[>=]]> DATE_FORMAT(now(), #{startMonth})
+   			</if>
+   			<if test="endMonth != null">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[<=]]> DATE_FORMAT(now(), #{endMonth})
+   			</if>
+   			<if test="originalLanguage != null">
+   				AND C.ORIGINAL_LANGUAGE = #{originalLanguage}
+   			</if>
+   			<if test="genreIds != null">
+				AND G.COUNT = ${genreIds.size()}
+   			</if>
 		ORDER BY
-   			C.POPULARITY DESC
+   			<if test="orderBy != null">
+	   			<if test="orderBy == 'RA'">C.RELEASE_DATE ASC, </if>
+	   			<if test="orderBy == 'RD'">C.RELEASE_DATE DESC, </if>
+	   			<if test="orderBy == 'CA'">C.VOTE_COUNT ASC, </if>
+	   			<if test="orderBy == 'CD'">C.VOTE_COUNT DESC, </if>
+	   			<if test="orderBy == 'TA'">C.TITLE ASC, </if>
+	   			<if test="orderBy == 'TD'">C.TITLE DESC, </if>
+	   			<if test="orderBy == 'PA'">C.POPULARITY ASC, </if>
+   			</if>
+	   		C.POPULARITY DESC
    		LIMIT
    			${(page * 20) - 20}, 20
    	</select>
@@ -166,6 +275,21 @@
    			C.VOTE_COUNT
    		FROM
    			movie.CONTENT C
+   		<if test="genreIds != null">
+   			INNER JOIN 
+   				(
+	   				SELECT 
+	   					CONTENT_ID, COUNT(CONTENT_ID) COUNT 
+	   				FROM 
+	   					movie.CONTENT_GENRE 
+	   				WHERE 
+	   					GENRE_ID IN 
+	   				<foreach collection="genreIds" item="genreId" open="(" close=")" separator=" , ">#{genreId}</foreach>
+	   				GROUP BY 
+	   					CONTENT_ID 
+   				) G 
+   			ON G.CONTENT_ID = C.CONTENT_ID
+   		</if>
    		WHERE
    			C.CONTENT_ID IN 
 	   			(
@@ -218,8 +342,29 @@
 				WHERE
 					B.COUNT = ${keywords.size()}
 				)
+			<if test="startMonth != null">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[>=]]> DATE_FORMAT(now(), #{startMonth})
+   			</if>
+   			<if test="endMonth != null">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[<=]]> DATE_FORMAT(now(), #{endMonth})
+   			</if>
+   			<if test="originalLanguage != null">
+   				AND C.ORIGINAL_LANGUAGE = #{originalLanguage}
+   			</if>
+   			<if test="genreIds != null">
+				AND G.COUNT = ${genreIds.size()}
+   			</if>
 		ORDER BY
-   			C.POPULARITY DESC
+   			<if test="orderBy != null">
+	   			<if test="orderBy == 'RA'">C.RELEASE_DATE ASC, </if>
+	   			<if test="orderBy == 'RD'">C.RELEASE_DATE DESC, </if>
+	   			<if test="orderBy == 'CA'">C.VOTE_COUNT ASC, </if>
+	   			<if test="orderBy == 'CD'">C.VOTE_COUNT DESC, </if>
+	   			<if test="orderBy == 'TA'">C.TITLE ASC, </if>
+	   			<if test="orderBy == 'TD'">C.TITLE DESC, </if>
+	   			<if test="orderBy == 'PA'">C.POPULARITY ASC, </if>
+   			</if>
+	   		C.POPULARITY DESC
    		LIMIT
    			${(page * 20) - 20}, 20
    	</select>
