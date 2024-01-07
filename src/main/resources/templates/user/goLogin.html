@@ -5,21 +5,23 @@
       layout:decorate="~{layouts/layout2}">
 
 <div layout:fragment="content">
-    <h1>로그인</h1>
-    <form action="login" method="post" enctype="multipart/form-data" th:object="${userDto}">
-        <table class="table">
-            <tr>
-                <th><input type="text" name="userId" placeholder="아이디"></th>
-             	<td th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}"></td>
-            </tr>
-            </tr>
-            <tr>
-                <th><input type="password" name="password" placeholder="비밀번호"></th>
-               	<td th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></td>
-            </tr>
-        </table>
-        <input type="submit" value="로그인">
-    </form>
+	<div>
+	    <h1>로그인</h1>
+	    <form action="login" method="post" enctype="multipart/form-data" th:object="${userDto}">
+	        <table class="table">
+	            <tr>
+	                <th><input type="text" name="userId" placeholder="아이디"></th>
+	             	<td th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}"></td>
+	            </tr>
+	            </tr>
+	            <tr>
+	                <th><input type="password" name="password" placeholder="비밀번호"></th>
+	               	<td th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></td>
+	            </tr>
+	        </table>
+	        <input type="submit" value="로그인">
+	    </form>
+    </div>
 </div>
 
 
