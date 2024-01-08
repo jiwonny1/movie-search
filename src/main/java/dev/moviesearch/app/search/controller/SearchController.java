@@ -95,15 +95,15 @@ public class SearchController {
 								@RequestParam(required = true, name = "keywords") List<String> keywords, 
 								@RequestParam(required = false, name = "genreIds") List<Integer> genreIds,
 								@RequestParam(required = false, defaultValue = "1") int page,
-								@RequestParam(required = false) String orderBy, 
+								@RequestParam(required = false, defaultValue = "PD") String orderBy, 
 								@RequestParam(required = false) String startMonth,
 								@RequestParam(required = false) String endMonth,
-								@RequestParam(required = false) String originalLanguage, 
+								@RequestParam(required = false, defaultValue = "no") String originalLanguage, 
 								Model model) {
 		List<MovieDto> movies = null;
 		
 		SearchConditionDto param = new SearchConditionDto(keywords, genreIds, page, orderBy, startMonth, endMonth, originalLanguage);
-		
+
 		switch (type) {
 		case "t": 
 			movies = searchService.searchByTitle(param);
@@ -122,6 +122,8 @@ public class SearchController {
 		}
 		
 		model.addAttribute("movies", movies);
+		model.addAttribute("type", type);
+		model.addAttribute("param", param);
 		
 		return "searchDetail";
 	}
@@ -131,10 +133,10 @@ public class SearchController {
 									@RequestParam(required = true, name = "keywords") List<String> keywords, 
 									@RequestParam(required = false, name = "genreIds") List<Integer> genreIds,
 									@RequestParam(required = false, defaultValue = "1") int page,
-									@RequestParam(required = false) String orderBy, 
+									@RequestParam(required = false, defaultValue = "PD") String orderBy, 
 									@RequestParam(required = false) String startMonth,
 									@RequestParam(required = false) String endMonth,
-									@RequestParam(required = false) String originalLanguage, 
+									@RequestParam(required = false, defaultValue = "no") String originalLanguage, 
 									Model model) {
 		List<MovieDto> movies = null;
 		
@@ -158,6 +160,8 @@ public class SearchController {
 		}
 		
 		model.addAttribute("movies", movies);
+		model.addAttribute("type", type);
+		model.addAttribute("param", param);
 		
 		return "movies";
 	}

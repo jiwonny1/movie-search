@@ -2,3 +2,7 @@ main .viewMore {
 	position: absolute;
 	margin: 125px 0 0 40px;
 }
+
+.searchConditionContainer + div {
+	width: 920px;
+}

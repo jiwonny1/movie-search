@@ -71,13 +71,13 @@
    			<foreach collection="keywords" item="keyword" separator=" and ">
    				C.TITLE like concat('%', #{keyword}, '%')
    			</foreach>
-   			<if test="startMonth != null">
+   			<if test="startMonth != null and startMonth.length() > 0">
    				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[>=]]> DATE_FORMAT(now(), #{startMonth})
    			</if>
-   			<if test="endMonth != null">
+   			<if test="endMonth != null and endMonth.length() > 0">
    				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[<=]]> DATE_FORMAT(now(), #{endMonth})
    			</if>
-   			<if test="originalLanguage != null">
+   			<if test="originalLanguage != null and originalLanguage != 'no'">
    				AND C.ORIGINAL_LANGUAGE = #{originalLanguage}
    			</if>
    			<if test="genreIds != null">
@@ -90,6 +90,8 @@
 	   			<if test="orderBy == 'RD'">C.RELEASE_DATE DESC, </if>
 	   			<if test="orderBy == 'CA'">C.VOTE_COUNT ASC, </if>
 	   			<if test="orderBy == 'CD'">C.VOTE_COUNT DESC, </if>
+	   			<if test="orderBy == 'VA'">C.VOTE_AVERAGE ASC, </if>
+	   			<if test="orderBy == 'VD'">C.VOTE_AVERAGE DESC, </if>
 	   			<if test="orderBy == 'TA'">C.TITLE ASC, </if>
 	   			<if test="orderBy == 'TD'">C.TITLE DESC, </if>
 	   			<if test="orderBy == 'PA'">C.POPULARITY ASC, </if>
@@ -97,7 +99,7 @@
 	   		C.POPULARITY DESC
    			
    		LIMIT
-   			${(page * 20) - 20}, 20
+   			${(page * 30) - 30}, 30
    	</select>
    	
    	<select id="selectByPartOfTitle" parameterType="dev.moviesearch.app.search.domain.SearchConditionDto" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
@@ -154,13 +156,13 @@
 		   			</foreach>
 		   		</where>
 		   		)
-		 	<if test="startMonth != null">
+		 	<if test="startMonth != null and startMonth.length() > 0">
    				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[>=]]> DATE_FORMAT(now(), #{startMonth})
    			</if>
-   			<if test="endMonth != null">
+   			<if test="endMonth != null and endMonth.length() > 0">
    				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[<=]]> DATE_FORMAT(now(), #{endMonth})
    			</if>
-   			<if test="originalLanguage != null">
+   			<if test="originalLanguage != null and originalLanguage != 'no'">
    				AND C.ORIGINAL_LANGUAGE = #{originalLanguage}
    			</if>
    			<if test="genreIds != null">
@@ -178,7 +180,7 @@
    			</if>
 	   		POPULARITY DESC
    		LIMIT
-   			${(page * 20) - 20}, 20
+   			${(page * 30) - 30}, 30
    	</select>
    	
    	<select id="selectByKeyword" parameterType="dev.moviesearch.app.search.domain.SearchConditionDto" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
@@ -235,13 +237,13 @@
 				WHERE
 					B.COUNT = ${keywords.size()}
 				)
-			<if test="startMonth != null">
+			<if test="startMonth != null and startMonth.length() > 0">
    				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[>=]]> DATE_FORMAT(now(), #{startMonth})
    			</if>
-   			<if test="endMonth != null">
+   			<if test="endMonth != null and endMonth.length() > 0">
    				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[<=]]> DATE_FORMAT(now(), #{endMonth})
    			</if>
-   			<if test="originalLanguage != null">
+   			<if test="originalLanguage != null and originalLanguage != 'no'">
    				AND C.ORIGINAL_LANGUAGE = #{originalLanguage}
    			</if>
    			<if test="genreIds != null">
@@ -259,7 +261,7 @@
    			</if>
 	   		C.POPULARITY DESC
    		LIMIT
-   			${(page * 20) - 20}, 20
+   			${(page * 30) - 30}, 30
    	</select>
    	
    	<select id="selectByHalfKeyword" parameterType="dev.moviesearch.app.search.domain.SearchConditionDto" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
@@ -342,13 +344,13 @@
 				WHERE
 					B.COUNT = ${keywords.size()}
 				)
-			<if test="startMonth != null">
+			<if test="startMonth != null and startMonth.length() > 0">
    				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[>=]]> DATE_FORMAT(now(), #{startMonth})
    			</if>
-   			<if test="endMonth != null">
+   			<if test="endMonth != null and endMonth.length() > 0">
    				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[<=]]> DATE_FORMAT(now(), #{endMonth})
    			</if>
-   			<if test="originalLanguage != null">
+   			<if test="originalLanguage != null and originalLanguage != 'no'">
    				AND C.ORIGINAL_LANGUAGE = #{originalLanguage}
    			</if>
    			<if test="genreIds != null">
@@ -366,7 +368,7 @@
    			</if>
 	   		C.POPULARITY DESC
    		LIMIT
-   			${(page * 20) - 20}, 20
+   			${(page * 30) - 30}, 30
    	</select>
     
 

@@ -15,38 +15,114 @@
 
 <div layout:fragment="content">
     <main>
-    	<div class="detailResultContainer text-wrap mt-3 mx-3">
-    		<div class="chartTitle">
-    			<h2 class="d-inline-block">어떤 조건의 검색인지</h2>
-    			<hr class="d-inline-block w-100 m-0 mb-2" />
-    		</div>
-    		<div class="cardContainer ">
-	    		<span th:each="movie, state : ${movies}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
-	    			<a th:href="@{|/post/detail/${movie.id}|}" class="text-black">
-		    			<div class="card-img-top overflow-hidden">
-		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
-							   	<p th:text="${movie.overview}">소개글</p>
-	    					</div>
-							<img th:if="${movie.posterPath != null}" th:src="@{|https://image.tmdb.org/t/p/w500${movie.posterPath}|}" class="card-img-top" alt="영화 포스터">
-							<img th:if="${movie.posterPath == null}" th:src="@{/images/emptyPoster.png}" class="card-img-top" alt="영화 포스터">
-		    			</div>
-						<div class="card-body">
-							<span th:text="${movie.title}" class="d-block mb-3 text-wrap lh-1 fs-6 fw-bold">영화 제목</span>
-							<div class="starContainer">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="orange" class="bi bi-star-fill" viewBox="0 0 16 16">
-									<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-								</svg>
-								<span th:text="${#numbers.formatDecimal(movie.voteAverage, 1, 1)}" class="align-text-top">평점</span>
-							</div>
-					  		<p th:text="${#dates.format(movie.releaseDate, 'yyyy년 MM월 dd일')}" class="card-text">개봉일자</p>
-						</div>
-					</a>
-				</span>
+		<div class="searchConditionContainer float-start flex-shrink-0 p-3 bg-success-subtle" style="width: 280px;">
+			<div class="d-flex  align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom border-success">
+				<h2 class="text-center fw-semibold w-100">필터</h2>
 			</div>
-			
-    	</div>
-    	<div th:if="${movies.size() == 20}" class="loadBtn btn btn-primary w-100">
-    		<h3>Load More</h3>
+			<form th:action="|/search/detail/${type}|" method="GET">
+				<input th:each="keyword : ${param.keywords}" th:value="${keyword}" type="hidden" name="keywords" />
+				<ul class="list-unstyled ps-0">
+					<li class="mb-1">
+						<h4 class="">정렬</h4>
+						<select name="orderBy" class="ms-1 my-2 w-100" style="height: 35px">
+							<optgroup label="------------------">
+								<option value="TA" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'TA'">제목 오름차순</option>
+								<option value="TD" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == TD">제목 내림차순</option>
+							</optgroup>
+							<optgroup label="------------------">
+								<option value="RA" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'RA'">개봉일 빠른순</option>
+								<option value="RD" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'RD'">개봉일 느린순</option>
+							</optgroup>
+							<optgroup label="------------------">
+								<option value="CA" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'CA'">평가 적은순</option>
+								<option value="CD" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'CD'">평가 많은순</option>
+							</optgroup>
+							<optgroup label="------------------">
+								<option value="VA" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'VA'">별점 낮은순</option>
+								<option value="VD" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'VD'">별점 높은순</option>
+							</optgroup>
+							<optgroup label="------------------">
+								<option value="PA" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'PA'">인지도 낮은순</option>
+								<option value="PD" th:selected="${param.orderBy == null} or (${param.orderBy != null} and ${param.orderBy.toString()} == 'PD')">인지도 높은순</option>
+							</optgroup>
+						</select>
+					</li>
+					
+					<li class="border-top border-success my-3"></li>
+					
+					<li class="mb-1">
+						<h4>개봉일</h4>
+						<input th:value="${param.startMonth}" type="month" name="startMonth" id="startMonth" class="mb-2"/>
+						<label for="startMonth">부터</label>
+						<input th:value="param.endMonth" type="month" name="endMonth" id="endMonth"/>
+						<label for="startMonth">까지</label>
+					</li>
+					
+					<li class="border-top border-success my-3"></li>
+					
+					<li class="mb-1">
+						<h4>언어별</h4>
+						<select name="originalLanguage">							
+							<option value="no" th:selected="${param.originalLanguage != null} and ${param.originalLanguage.toString()} == 'no'">선택안함</option>
+							<option value="ko" th:selected="${param.originalLanguage != null} and ${param.originalLanguage.toString()} == 'ko'">한국어</option>
+							<option value="en" th:selected="${param.originalLanguage != null} and ${param.originalLanguage.toString()} == 'en'">영어</option>
+							<option value="cn" th:selected="${param.originalLanguage != null} and ${param.originalLanguage.toString()} == 'cn'">중국어</option>
+							<option value="ja" th:selected="${param.originalLanguage != null} and ${param.originalLanguage.toString()} == 'ja'">일본어</option>
+							<option value="es" th:selected="${param.originalLanguage != null} and ${param.originalLanguage.toString()} == 'es'">스페인어</option>
+						</select>
+					</li>
+					
+					<li class="border-top border-success my-3"></li>
+					
+					<li class="mb-1">
+						<h4>장르</h4>
+						<ul class="list-unstyled ps-0">
+							<li th:each="genre : ${T(dev.moviesearch.app.movieapi.domain.MovieGenreIds).values()}" class="d-inline-block my-1 mx-1">
+								<input th:checked="${param.genreIds != null and #lists.contains(param.genreIds, genre.code.toString())}" th:id="|genre-${genre.code}|" th:value="${genre.code}" type="checkbox" name="genreIds" class="btn-check"  autocomplete="off">
+								<label class="btn btn-outline-primary" th:for="|genre-${genre.code}|" th:text="${genre.genreName}"></label>
+							</li>
+						</ul>
+					</li>
+					
+					<li class="border-top border-success my-3"></li>
+				</ul>
+				<input type="submit" class="btn btn-primary w-100 mt-3" value="검색" />
+			</form>
+		</div>
+		<div class="d-inline-block">
+	    	<div class="detailResultContainer text-wrap mt-3 mx-3">
+	    		<div class="chartTitle">
+	    			<h2 class="d-inline-block">어떤 조건의 검색인지</h2>
+	    			<hr class="d-inline-block w-100 m-0 mb-2" />
+	    		</div>
+	    		<div class="cardContainer ">
+		    		<span th:each="movie, state : ${movies}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
+		    			<a th:href="@{|/post/detail/${movie.id}|}" class="text-black">
+			    			<div class="card-img-top overflow-hidden">
+			    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
+								   	<p th:text="${movie.overview}">소개글</p>
+		    					</div>
+								<img th:if="${movie.posterPath != null}" th:src="@{|https://image.tmdb.org/t/p/w500${movie.posterPath}|}" class="card-img-top" alt="영화 포스터">
+								<img th:if="${movie.posterPath == null}" th:src="@{/images/emptyPoster.png}" class="card-img-top" alt="영화 포스터">
+			    			</div>
+							<div class="card-body">
+								<span th:text="${movie.title}" class="d-block mb-3 text-wrap lh-1 fs-6 fw-bold">영화 제목</span>
+								<div class="starContainer">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="orange" class="bi bi-star-fill" viewBox="0 0 16 16">
+										<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+									</svg>
+									<span th:text="${#numbers.formatDecimal(movie.voteAverage, 1, 1)}" class="align-text-top">평점</span>
+								</div>
+						  		<p th:text="${#dates.format(movie.releaseDate, 'yyyy년 MM월 dd일')}" class="card-text">개봉일자</p>
+							</div>
+						</a>
+					</span>
+				</div>
+				
+	    	</div>
+	    	<div th:if="${movies.size() == 30}" class="loadBtn btn btn-primary w-100 mt-3">
+	    		<h3>Load More</h3>
+	    	</div>
     	</div>
     	
     </main>
