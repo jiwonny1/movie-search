@@ -44,7 +44,7 @@
 					<li class="border-top border-success my-3"></li>
 					
 					<li class="mb-1">
-						<h4>언어별</h4>
+						<h4>언어</h4>
 						<select name="originalLanguage">		
 							<option th:each="language : ${T(dev.moviesearch.app.movieapi.domain.MovieLanguages).values()}" 
 									th:value="${language.code}" th:text="${language.languageName}" 

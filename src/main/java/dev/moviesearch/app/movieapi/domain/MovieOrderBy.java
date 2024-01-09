@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum MovieOrderBy {
-	TITLE_ASC("제목 오름차순", "TA"),
-	TITLE_DESC("제목 내림차순", "TD"),
-	RELEASE_DATE_ASC("개봉일 빠른순", "RA"),
-	RELEASE_DATE_DESC("개봉일 느린순", "RD"),
+	TITLE_ASC("제목 순", "TA"),
+	TITLE_DESC("제목 역순", "TD"),
+	RELEASE_DATE_ASC("오래된 개봉순", "RA"),
+	RELEASE_DATE_DESC("최근 개봉순", "RD"),
 	COUNT_ASC("평가 적은순", "CA"),
 	COUNT_DESC("평가 많은순", "CD"),
 	VOTE_ASC("평가 낮은순", "VA"),
