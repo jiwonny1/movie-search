@@ -18,12 +18,12 @@
     	<h1 th:if="${ title.size() == 0 && (titlePart == null || titlePart.size() == 0) && keyword.size() == 0 && (keywordHalf == null || keywordHalf.size() == 0) }">검색 결과가 없습니다.</h1>
     	
     	<div th:if="${title.size() > 0}" class="titleResultContainer text-nowrap mt-3 mx-3">
-    		<div class="chartTitle">
+    		<div class="chartTitle overflow-hidden">
     			<h2 class="d-inline-block">제목이 일치하는 항목</h2>
     			<hr class="d-inline-block w-100 m-0 mb-2" />
     		</div>
-    		<div class="cardContainer ">
-	    		<div th:each="list, state : ${title}" th:if="${state.count <= 6}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
+    		<div class="cardContainer text-wrap">
+	    		<div th:each="list, state : ${title}" th:if="${state.count <= 11}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
 	    			<a th:href="@{|/post/detail/${list.id}|}" class="text-black">
 		    			<div class="card-img-top overflow-hidden">
 		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
@@ -45,7 +45,7 @@
 					</a>
 				</div>
 				<a th:href="@{|/search/detail/t?${keywords}|}">
-					<button th:if="${title.size() > 6}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
+					<button th:if="${title.size() > 11}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
 							<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
 						</svg>
@@ -56,12 +56,12 @@
     	</div>
     	
     	<div th:if="${titlePart != null && titlePart.size() > 0}" class="titleResultContainer text-nowrap mt-3 mx-3">
-    		<div class="chartTitle">
-    			<h2 class="d-inline-block">제목이 일부 일치하는 항목</h2>
+    		<div class="chartTitle overflow-hidden">
+    			<h2 class="d-inline-block overflow-hidden">제목이 일부 일치하는 항목</h2>
     			<hr class="d-inline-block w-100 m-0 mb-2" />
     		</div>
-    		<div class="cardContainer ">
-	    		<div th:each="list, state : ${titlePart}" th:if="${state.count <= 6}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
+    		<div class="cardContainer text-wrap">
+	    		<div th:each="list, state : ${titlePart}" th:if="${state.count <= 11}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
 	    			<a th:href="@{|/post/detail/${list.id}|}" class="text-black">
 		    			<div class="card-img-top overflow-hidden">
 		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
@@ -83,7 +83,7 @@
 					</a>
 				</div>
 				<a th:href="@{|/search/detail/ts?${keywords}|}">
-					<button th:if="${titlePart != null && titlePart.size() > 6}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
+					<button th:if="${titlePart != null && titlePart.size() > 11}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
 							<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
 						</svg>
@@ -96,11 +96,11 @@
     	
     	<div th:if="${keyword.size() > 0}" class="keywordResultContainer text-nowrap mt-3 mx-3">
     		<div class="chartTitle">
-    			<h2 class="d-inline-block">키워드가 일치하는 항목</h2>
+    			<h2 class="d-inline-block overflow-hidden">키워드가 일치하는 항목</h2>
     			<hr class="d-inline-block w-100 m-0 mb-2" />
     		</div>
-    		<div class="cardContainer ">
-	    		<div th:each="list, state : ${keyword}" th:if="${state.count <= 6}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
+    		<div class="cardContainer text-wrap">
+	    		<div th:each="list, state : ${keyword}" th:if="${state.count <= 11}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
 	    			<a th:href="@{|/post/detail/${list.id}|}" class="text-black">
 		    			<div class="card-img-top overflow-hidden">
 		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
@@ -122,7 +122,7 @@
 					</a>
 				</div>
 				<a th:href="@{|/search/detail/k?${keywords}|}">
-					<button th:if="${keyword.size() > 6}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
+					<button th:if="${keyword.size() > 11}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
 							<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
 						</svg>
@@ -134,11 +134,11 @@
     	
     	<div th:if="${keywordHalf != null && keywordHalf.size() > 0}" class="keywordHalfResultContainer text-nowrap mt-3 mx-3">
     		<div class="chartTitle">
-    			<h2 class="d-inline-block">키워드가 일부 일치하는 항목</h2>
+    			<h2 class="d-inline-block overflow-hidden">키워드가 일부 일치하는 항목</h2>
     			<hr class="d-inline-block w-100 m-0 mb-2" />
     		</div>
-    		<div class="cardContainer ">
-	    		<div th:each="list, state : ${keywordHalf}" th:if="${state.count <= 6}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
+    		<div class="cardContainer text-wrap">
+	    		<div th:each="list, state : ${keywordHalf}" th:if="${state.count <= 11}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
 	    			<a th:href="@{|/post/detail/${list.id}|}" class="text-black">
 		    			<div class="card-img-top overflow-hidden">
 		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
@@ -160,7 +160,7 @@
 					</a>
 				</div>
 				<a th:href="@{|/search/detail/ks?${keywords}|}">
-					<button th:if="${keywordHalf.size() > 6}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
+					<button th:if="${keywordHalf.size() > 11}" class="btn btn-secondary rounded-circle p-3 lh-1 viewMore" type="button">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
 							<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
 						</svg>
