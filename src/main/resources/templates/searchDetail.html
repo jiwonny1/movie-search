@@ -74,7 +74,7 @@
 		<div class="d-inline-block">
 	    	<div class="detailResultContainer text-wrap mt-3 mx-3">
 	    		<div class="chartTitle">
-	    			<h2 class="d-inline-block">어떤 조건의 검색인지</h2>
+	    			<h2 class="d-inline-block" th:text="|${param.keywords.toString()}에 대해 ${T(dev.moviesearch.app.search.domain.SearchTypes).find(type).description}|">어떤 조건의 검색인지</h2>
 	    			<hr class="d-inline-block w-100 m-0 mb-2" />
 	    		</div>
 	    		<div class="cardContainer ">
