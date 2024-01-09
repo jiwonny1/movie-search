@@ -25,26 +25,9 @@
 					<li class="mb-1">
 						<h4 class="">정렬</h4>
 						<select name="orderBy" class="ms-1 my-2 w-100" style="height: 35px">
-							<optgroup label="------------------">
-								<option value="TA" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'TA'">제목 오름차순</option>
-								<option value="TD" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == TD">제목 내림차순</option>
-							</optgroup>
-							<optgroup label="------------------">
-								<option value="RA" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'RA'">개봉일 빠른순</option>
-								<option value="RD" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'RD'">개봉일 느린순</option>
-							</optgroup>
-							<optgroup label="------------------">
-								<option value="CA" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'CA'">평가 적은순</option>
-								<option value="CD" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'CD'">평가 많은순</option>
-							</optgroup>
-							<optgroup label="------------------">
-								<option value="VA" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'VA'">별점 낮은순</option>
-								<option value="VD" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'VD'">별점 높은순</option>
-							</optgroup>
-							<optgroup label="------------------">
-								<option value="PA" th:selected="${param.orderBy != null} and ${param.orderBy.toString()} == 'PA'">인지도 낮은순</option>
-								<option value="PD" th:selected="${param.orderBy == null} or (${param.orderBy != null} and ${param.orderBy.toString()} == 'PD')">인지도 높은순</option>
-							</optgroup>
+							<option th:each="order : ${T(dev.moviesearch.app.movieapi.domain.MovieOrderBy).values()}" 
+									th:value="${order.code}" th:text="${order.orderName}" 
+									th:selected="(${order.code.toString()} == 'PD' and ${param.orderBy} == null) or (${param.orderBy} != null and ${param.orderBy.toString()} == ${order.code})">정렬 기준</option>
 						</select>
 					</li>
 					
@@ -62,13 +45,10 @@
 					
 					<li class="mb-1">
 						<h4>언어별</h4>
-						<select name="originalLanguage">							
-							<option value="no" th:selected="${param.originalLanguage != null} and ${param.originalLanguage.toString()} == 'no'">선택안함</option>
-							<option value="ko" th:selected="${param.originalLanguage != null} and ${param.originalLanguage.toString()} == 'ko'">한국어</option>
-							<option value="en" th:selected="${param.originalLanguage != null} and ${param.originalLanguage.toString()} == 'en'">영어</option>
-							<option value="cn" th:selected="${param.originalLanguage != null} and ${param.originalLanguage.toString()} == 'cn'">중국어</option>
-							<option value="ja" th:selected="${param.originalLanguage != null} and ${param.originalLanguage.toString()} == 'ja'">일본어</option>
-							<option value="es" th:selected="${param.originalLanguage != null} and ${param.originalLanguage.toString()} == 'es'">스페인어</option>
+						<select name="originalLanguage">		
+							<option th:each="language : ${T(dev.moviesearch.app.movieapi.domain.MovieLanguages).values()}" 
+									th:value="${language.code}" th:text="${language.languageName}" 
+									th:selected="${param.originalLanguage != null} and ${param.originalLanguage.toString()} == ${language.code}">언어 선택</option>					
 						</select>
 					</li>
 					
@@ -78,7 +58,9 @@
 						<h4>장르</h4>
 						<ul class="list-unstyled ps-0">
 							<li th:each="genre : ${T(dev.moviesearch.app.movieapi.domain.MovieGenreIds).values()}" class="d-inline-block my-1 mx-1">
-								<input th:checked="${param.genreIds != null and #lists.contains(param.genreIds, genre.code.toString())}" th:id="|genre-${genre.code}|" th:value="${genre.code}" type="checkbox" name="genreIds" class="btn-check"  autocomplete="off">
+								<input th:checked="${param.genreIds != null and #lists.contains(param.genreIds, genre.code.toString())}" 
+									   th:id="|genre-${genre.code}|" th:value="${genre.code}" type="checkbox" name="genreIds" 
+									   class="btn-check"  autocomplete="off">
 								<label class="btn btn-outline-primary" th:for="|genre-${genre.code}|" th:text="${genre.genreName}"></label>
 							</li>
 						</ul>
