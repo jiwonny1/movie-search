@@ -24,10 +24,12 @@ public class MainController {
 	public String getIndex(HttpSession session, Model model) {
 		
 		// 개발용 코드----------------------------
-		session.setAttribute("user", "jsw4795");
+		//session.setAttribute("user", "jsw4795");
+		//session.invalidate();
 		//----------------------------------------
 		
 		String userId = (String)session.getAttribute("user");
+		model.addAttribute("userId", userId);
 		
 		// 최근 검색어 가져오기------------------------------------------
 		if(userId != null) {
@@ -39,9 +41,6 @@ public class MainController {
 		// 영화 리스트 가져오기------------------------------------------
 		MovieListDto trend = movieService.getPopularMovieList(1);
 		MovieListDto recentRelease = movieService.getPlayingMovieList(1);
-		
-		System.out.println(">>>>>>>" + trend);
-		System.out.println(">>>>>>>" + recentRelease);
 		
 		model.addAttribute("trend", trend);
 		model.addAttribute("recentRelease", recentRelease);

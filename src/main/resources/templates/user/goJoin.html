@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout2}">
+
+<div layout:fragment="content">
+	<div id="joinForm">
+		<h1>회원가입</h1>
+		    <form action="join" method="post" enctype="multipart/form-data" th:object="${userDto}">
+		        <table class="table">
+		            <tr>
+		                <th><input type="text" name="name" placeholder="이름"></th>
+		            		<td><th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></td>
+		            </tr>
+		            <tr>
+		            <tr>
+		                <th><input type="number" name="age" placeholder="나이"></th>
+		                <td><th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></td>
+		            </tr>
+		            <tr>
+		                <th><input type="text" name="userId" placeholder="아이디"></th>
+		             	<td th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}"></td>
+		            </tr>
+		            </tr>
+		            <tr>
+		                <th><input type="password" name="password" placeholder="비밀번호"></th>
+		               	<td th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></td>
+		            </tr>
+		            <tr>
+		                <th><input type="text" name="genre" placeholder="선호 장르"></th>
+		              	<td th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}"></td>
+		            </tr>
+		        </table>
+		        <input type="submit" value="회원가입">
+		    </form>
+    </div>
+</div>
+
+
+</html>
