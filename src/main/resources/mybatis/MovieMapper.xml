@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.moviesearch.app.movieapi.mapper.MovieMapper">
+    
+    <insert id="insertMovieList" parameterType="dev.moviesearch.app.movieapi.domain.MovieDto">
+    	<!-- CONTENT에 insert (이미 존재하는 데이터면 인기도, 평가 개수, 평점 업데이트 -->
+    	INSERT INTO movie.CONTENT
+	    	(
+	    		CONTENT_ID,
+	    		TITLE,
+	    		RELEASE_DATE,
+	    		POSTER_PATH,
+	    		OVERVIEW,
+	    		ORIGINAL_LANGUAGE,
+	    		POPULARITY,
+	    		VOTE_AVERAGE,
+	    		VOTE_COUNT
+	    	)
+    	VALUES
+    	<foreach collection="list" item="item" separator=" , ">
+	    	(
+		    	#{item.id},
+		    	#{item.title},
+		    	#{item.releaseDate},
+		   		#{item.posterPath},
+		   		#{item.overview},
+		   		#{item.originalLanguage},
+		   		#{item.popularity},
+		   		#{item.voteAverage},
+		   		#{item.voteCount}
+	    	)
+    	</foreach>
+    	ON DUPLICATE KEY UPDATE
+	    	POPULARITY = values(POPULARITY),
+	    	VOTE_AVERAGE = values(VOTE_AVERAGE),
+	    	OVERVIEW = values(OVERVIEW),
+	    	VOTE_COUNT = values(VOTE_COUNT)
+    	;
+    	
+    	<!-- 장르 인서트 (CONTENT_ID, GENRE_ID 컬럼으로 유니크 걸어놔서 중복 안됨) <INSERT IGNORE ~ 로 중복되면 그냥 넘어감> -->
+    	INSERT IGNORE INTO CONTENT_GENRE
+    	(
+    	CONTENT_ID,
+    	GENRE_ID
+    	)
+    	VALUES
+    	<foreach collection="list" item="item" separator=" , ">
+    		<if test="item.genreIds.size() > 0">
+	    		<foreach collection="item.genreIds" item="genreId" separator=" , ">
+			    	(
+				    	#{item.id},
+				    	#{genreId}
+			    	)
+		    	</foreach>
+	    	</if>
+    	</foreach>
+    </insert>
+
+</mapper>
