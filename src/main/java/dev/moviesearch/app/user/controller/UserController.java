@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import dev.moviesearch.app.memo.service.MemoService;
+
 import dev.moviesearch.app.user.domain.UserDto;
 import dev.moviesearch.app.user.service.UserService;
 import jakarta.validation.Valid;
@@ -16,15 +16,6 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private MemoService memoService;
-	
-	@GetMapping("/main")
-	public String main(Model model) {
-		model.addAttribute("memos", memoService.findMemoList());
-		return "index";
-	}
-	
 	
 	@GetMapping("/go_join") //회원가입 페이지로 이동
 	public String goJoin(UserDto dto) {
