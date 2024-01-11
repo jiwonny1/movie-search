@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.moviesearch.app.user.mapper.UserMapper">
+
+<!--     <select id="userList" resultType="dev.moviesearch.app.user.domain.UserDto"> -->
+    <select id="userList" resultType="userDto">
+		SELECT USER_ID, AGE, PASSWORD, GENRE, NAME FROM movie.USERS
+    </select>
+
+<!--     <insert id="insertUser" parameterType="dev.moviesearch.app.user.domain.UserDto"> -->
+    <insert id="insertUser" parameterType="userDto">
+	    INSERT INTO movie.USERS (NAME, AGE, USER_ID, PASSWORD, GENRE)
+	    VALUES (#{name}, #{age}, #{userId}, #{password}, #{genre})
+    </insert>
+    
+<!--     <select id="findUser" parameterType="String" resultType="dev.moviesearch.app.user.domain.UserDto"> -->
+    <select id="findUser" parameterType="String" resultType="userDto">
+		SELECT USER_ID, AGE, PASSWORD, GENRE, NAME
+		FROM movie.USERS WHERE USER_ID = #{userId}
+    </select>
+
+<!--     <update id="updateUser" parameterType="dev.moviesearch.app.user.domain.UserDto"> -->
+    <update id="updateUser" parameterType="userDto">
+        UPDATE movie.USERS 
+		SET PASSWORD = #{password}, 
+		AND GENRE = #{genre},
+		AND NAME = #{name}
+		WHERE USER_ID = #{userId}
+    </update>
+
+    <delete id="deleteUser">
+        DELETE FROM movie.USERS WHERE USER_ID = #{userId}
+    </delete>
+
+</mapper>
+
+
