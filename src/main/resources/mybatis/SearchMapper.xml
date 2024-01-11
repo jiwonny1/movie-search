@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.moviesearch.app.search.mapper.SearchMapper">
+
+    <select id="selectRecentSearch" parameterType="String" resultType="dev.moviesearch.app.search.domain.SearchLogDto">
+        SELECT
+            USER_ID, SEARCH_WORD, SEARCH_DATE
+        FROM
+            movie.SEARCH_LOG
+        WHERE
+        	USER_ID = #{userId}
+       	ORDER BY
+       		SEARCH_DATE DESC
+       	LIMIT
+       		20
+    </select>
+   	
+    <delete id="deleteRecentSearch" parameterType="dev.moviesearch.app.search.domain.SearchLogDto">
+    	DELETE
+    	FROM
+    		movie.SEARCH_LOG
+    	WHERE
+    		USER_ID = #{userId} AND SEARCH_WORD = #{searchWord}
+    </delete>
+    
+    <insert id="insertRecentSearch" parameterType="dev.moviesearch.app.search.domain.SearchLogDto">
+    	INSERT INTO movie.SEARCH_LOG
+    	(
+    		USER_ID, SEARCH_WORD, SEARCH_DATE
+    	)
+    	VALUES
+    	<foreach collection="list" item="log" separator=" , ">
+    		(
+				#{log.userId}, #{log.searchWord}, now()
+    		)
+    	</foreach>
+    	ON DUPLICATE KEY UPDATE
+    	SEARCH_DATE = now()
+    </insert>
+
+
+	<select id="selectByTitle" parameterType="dev.moviesearch.app.search.domain.SearchConditionDto" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
+   		SELECT 
+   			C.CONTENT_ID ID,
+   			C.TITLE,
+   			C.RELEASE_DATE,
+   			C.POSTER_PATH,
+   			C.OVERVIEW,
+   			C.ORIGINAL_LANGUAGE,
+   			C.POPULARITY,
+   			C.VOTE_AVERAGE,
+   			C.VOTE_COUNT
+   		FROM
+   			movie.CONTENT C
+   		<if test="genreIds != null">
+   			INNER JOIN 
+   				(
+	   				SELECT 
+	   					CONTENT_ID, COUNT(CONTENT_ID) COUNT 
+	   				FROM 
+	   					movie.CONTENT_GENRE 
+	   				WHERE 
+	   					GENRE_ID IN 
+	   				<foreach collection="genreIds" item="genreId" open="(" close=")" separator=" , ">#{genreId}</foreach>
+	   				GROUP BY 
+	   					CONTENT_ID 
+   				) G 
+   			ON G.CONTENT_ID = C.CONTENT_ID
+   		</if>
+   		<where>
+   			<foreach collection="keywords" item="keyword" separator=" and ">
+   				C.TITLE like concat('%', #{keyword}, '%')
+   			</foreach>
+   			<if test="startMonth != null and startMonth.length() > 0">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[>=]]> DATE_FORMAT(now(), #{startMonth})
+   			</if>
+   			<if test="endMonth != null and endMonth.length() > 0">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[<=]]> DATE_FORMAT(now(), #{endMonth})
+   			</if>
+   			<if test="originalLanguage != null and originalLanguage != 'no'">
+   				AND C.ORIGINAL_LANGUAGE = #{originalLanguage}
+   			</if>
+   			<if test="genreIds != null">
+				AND G.COUNT = ${genreIds.size()}
+   			</if>
+   		</where>
+   		ORDER BY
+   			<if test="orderBy != null">
+	   			<if test="orderBy == 'RA'">C.RELEASE_DATE ASC, </if>
+	   			<if test="orderBy == 'RD'">C.RELEASE_DATE DESC, </if>
+	   			<if test="orderBy == 'CA'">C.VOTE_COUNT ASC, </if>
+	   			<if test="orderBy == 'CD'">C.VOTE_COUNT DESC, </if>
+	   			<if test="orderBy == 'VA'">C.VOTE_AVERAGE ASC, </if>
+	   			<if test="orderBy == 'VD'">C.VOTE_AVERAGE DESC, </if>
+	   			<if test="orderBy == 'TA'">C.TITLE ASC, </if>
+	   			<if test="orderBy == 'TD'">C.TITLE DESC, </if>
+	   			<if test="orderBy == 'PA'">C.POPULARITY ASC, </if>
+   			</if>
+	   		C.POPULARITY DESC
+   			
+   		LIMIT
+   			${(page * 30) - 30}, 30
+   	</select>
+   	
+   	<select id="selectByPartOfTitle" parameterType="dev.moviesearch.app.search.domain.SearchConditionDto" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
+   		SELECT 
+   			C.CONTENT_ID ID,
+   			C.TITLE,
+   			C.RELEASE_DATE,
+   			C.POSTER_PATH,
+   			C.OVERVIEW,
+   			C.ORIGINAL_LANGUAGE,
+   			C.POPULARITY,
+   			C.VOTE_AVERAGE,
+   			C.VOTE_COUNT
+   		FROM
+   			movie.CONTENT C
+   		<if test="genreIds != null">
+			INNER JOIN 
+   				(
+	   				SELECT 
+	   					CONTENT_ID, COUNT(CONTENT_ID) COUNT 
+	   				FROM 
+	   					movie.CONTENT_GENRE 
+	   				WHERE 
+	   					GENRE_ID IN 
+	   				<foreach collection="genreIds" item="genreId" open="(" close=")" separator=" , ">#{genreId}</foreach>
+	   				GROUP BY 
+	   					CONTENT_ID 
+   				) G 
+   			ON G.CONTENT_ID = C.CONTENT_ID
+   		</if>
+   		WHERE
+   			C.CONTENT_ID IN 
+   				(
+		   		SELECT 
+		   			CONTENT_ID
+		   		FROM
+		   			movie.CONTENT
+		   		<where>
+		   			<foreach collection="keywords" item="keyword" separator=" or ">
+		   				TITLE like concat('%', #{keyword}, '%')
+		   			</foreach>
+		   		</where>
+		   		)
+		   	AND
+   			C.CONTENT_ID NOT IN 
+		   		(
+		   		SELECT 
+		   			CONTENT_ID
+		   		FROM
+		   			movie.CONTENT
+		   		<where>
+		   			<foreach collection="keywords" item="keyword" separator=" and ">
+		   				TITLE like concat('%', #{keyword}, '%')
+		   			</foreach>
+		   		</where>
+		   		)
+		 	<if test="startMonth != null and startMonth.length() > 0">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[>=]]> DATE_FORMAT(now(), #{startMonth})
+   			</if>
+   			<if test="endMonth != null and endMonth.length() > 0">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[<=]]> DATE_FORMAT(now(), #{endMonth})
+   			</if>
+   			<if test="originalLanguage != null and originalLanguage != 'no'">
+   				AND C.ORIGINAL_LANGUAGE = #{originalLanguage}
+   			</if>
+   			<if test="genreIds != null">
+				AND G.COUNT = ${genreIds.size()}
+   			</if>
+		ORDER BY
+   			<if test="orderBy != null">
+	   			<if test="orderBy == 'RA'">C.RELEASE_DATE ASC, </if>
+	   			<if test="orderBy == 'RD'">C.RELEASE_DATE DESC, </if>
+	   			<if test="orderBy == 'CA'">C.VOTE_COUNT ASC, </if>
+	   			<if test="orderBy == 'CD'">C.VOTE_COUNT DESC, </if>
+	   			<if test="orderBy == 'TA'">C.TITLE ASC, </if>
+	   			<if test="orderBy == 'TD'">C.TITLE DESC, </if>
+	   			<if test="orderBy == 'PA'">C.POPULARITY ASC, </if>
+   			</if>
+	   		POPULARITY DESC
+   		LIMIT
+   			${(page * 30) - 30}, 30
+   	</select>
+   	
+   	<select id="selectByKeyword" parameterType="dev.moviesearch.app.search.domain.SearchConditionDto" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
+   		SELECT 
+   			C.CONTENT_ID ID,
+   			C.TITLE,
+   			C.RELEASE_DATE,
+   			C.POSTER_PATH,
+   			C.OVERVIEW,
+   			C.ORIGINAL_LANGUAGE,
+   			C.POPULARITY,
+   			C.VOTE_AVERAGE,
+   			C.VOTE_COUNT
+   		FROM
+   			movie.CONTENT C
+   		<if test="genreIds != null">
+   			INNER JOIN 
+   				(
+	   				SELECT 
+	   					CONTENT_ID, COUNT(CONTENT_ID) COUNT 
+	   				FROM 
+	   					movie.CONTENT_GENRE 
+	   				WHERE 
+	   					GENRE_ID IN 
+	   				<foreach collection="genreIds" item="genreId" open="(" close=")" separator=" , ">#{genreId}</foreach>
+	   				GROUP BY 
+	   					CONTENT_ID 
+   				) G 
+   			ON G.CONTENT_ID = C.CONTENT_ID
+   		</if>
+   		WHERE
+   			C.CONTENT_ID IN 
+	   			(
+	   			SELECT DISTINCT A.CONTENT_ID FROM 
+					movie.KEYWORD A
+				INNER JOIN
+					(
+					SELECT 
+						CONTENT_ID, COUNT(CONTENT_ID) COUNT 
+					FROM 
+						movie.KEYWORD 
+					WHERE 
+						KEYWORD IN
+						(
+						<foreach collection="keywords" item="keyword" separator=" , ">
+			   				#{keyword}
+			   			</foreach>
+						) 
+					GROUP BY 
+						CONTENT_ID 
+					) B
+				ON 
+					B.CONTENT_ID = A.CONTENT_ID
+				WHERE
+					B.COUNT = ${keywords.size()}
+				)
+			<if test="startMonth != null and startMonth.length() > 0">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[>=]]> DATE_FORMAT(now(), #{startMonth})
+   			</if>
+   			<if test="endMonth != null and endMonth.length() > 0">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[<=]]> DATE_FORMAT(now(), #{endMonth})
+   			</if>
+   			<if test="originalLanguage != null and originalLanguage != 'no'">
+   				AND C.ORIGINAL_LANGUAGE = #{originalLanguage}
+   			</if>
+   			<if test="genreIds != null">
+				AND G.COUNT = ${genreIds.size()}
+   			</if>
+		ORDER BY
+   			<if test="orderBy != null">
+	   			<if test="orderBy == 'RA'">C.RELEASE_DATE ASC, </if>
+	   			<if test="orderBy == 'RD'">C.RELEASE_DATE DESC, </if>
+	   			<if test="orderBy == 'CA'">C.VOTE_COUNT ASC, </if>
+	   			<if test="orderBy == 'CD'">C.VOTE_COUNT DESC, </if>
+	   			<if test="orderBy == 'TA'">C.TITLE ASC, </if>
+	   			<if test="orderBy == 'TD'">C.TITLE DESC, </if>
+	   			<if test="orderBy == 'PA'">C.POPULARITY ASC, </if>
+   			</if>
+	   		C.POPULARITY DESC
+   		LIMIT
+   			${(page * 30) - 30}, 30
+   	</select>
+   	
+   	<select id="selectByHalfKeyword" parameterType="dev.moviesearch.app.search.domain.SearchConditionDto" resultType="dev.moviesearch.app.movieapi.domain.MovieDto">
+   		SELECT 
+   			C.CONTENT_ID ID,
+   			C.TITLE,
+   			C.RELEASE_DATE,
+   			C.POSTER_PATH,
+   			C.OVERVIEW,
+   			C.ORIGINAL_LANGUAGE,
+   			C.POPULARITY,
+   			C.VOTE_AVERAGE,
+   			C.VOTE_COUNT
+   		FROM
+   			movie.CONTENT C
+   		<if test="genreIds != null">
+   			INNER JOIN 
+   				(
+	   				SELECT 
+	   					CONTENT_ID, COUNT(CONTENT_ID) COUNT 
+	   				FROM 
+	   					movie.CONTENT_GENRE 
+	   				WHERE 
+	   					GENRE_ID IN 
+	   				<foreach collection="genreIds" item="genreId" open="(" close=")" separator=" , ">#{genreId}</foreach>
+	   				GROUP BY 
+	   					CONTENT_ID 
+   				) G 
+   			ON G.CONTENT_ID = C.CONTENT_ID
+   		</if>
+   		WHERE
+   			C.CONTENT_ID IN 
+	   			(
+	   			SELECT DISTINCT A.CONTENT_ID FROM 
+					movie.KEYWORD A
+				INNER JOIN
+					(
+					SELECT 
+						CONTENT_ID, COUNT(CONTENT_ID) COUNT 
+					FROM 
+						movie.KEYWORD 
+					WHERE 
+						KEYWORD IN
+						(
+						<foreach collection="keywords" item="keyword" separator=" , ">
+			   				#{keyword}
+			   			</foreach>
+						) 
+					GROUP BY 
+						CONTENT_ID 
+					) B
+				ON 
+					B.CONTENT_ID = A.CONTENT_ID
+				WHERE
+					B.COUNT <![CDATA[<]]>  ${keywords.size()}
+				)
+			AND
+			C.CONTENT_ID NOT IN
+				(
+	   			SELECT DISTINCT A.CONTENT_ID FROM 
+					movie.KEYWORD A
+				INNER JOIN
+					(
+					SELECT 
+						CONTENT_ID, COUNT(CONTENT_ID) COUNT 
+					FROM 
+						movie.KEYWORD 
+					WHERE 
+						KEYWORD IN
+						(
+						<foreach collection="keywords" item="keyword" separator=" , ">
+			   				#{keyword}
+			   			</foreach>
+						) 
+					GROUP BY 
+						CONTENT_ID 
+					) B
+				ON 
+					B.CONTENT_ID = A.CONTENT_ID
+				WHERE
+					B.COUNT = ${keywords.size()}
+				)
+			<if test="startMonth != null and startMonth.length() > 0">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[>=]]> DATE_FORMAT(now(), #{startMonth})
+   			</if>
+   			<if test="endMonth != null and endMonth.length() > 0">
+   				AND DATE_FORMAT(C.RELEASE_DATE, '%Y-%m') <![CDATA[<=]]> DATE_FORMAT(now(), #{endMonth})
+   			</if>
+   			<if test="originalLanguage != null and originalLanguage != 'no'">
+   				AND C.ORIGINAL_LANGUAGE = #{originalLanguage}
+   			</if>
+   			<if test="genreIds != null">
+				AND G.COUNT = ${genreIds.size()}
+   			</if>
+		ORDER BY
+   			<if test="orderBy != null">
+	   			<if test="orderBy == 'RA'">C.RELEASE_DATE ASC, </if>
+	   			<if test="orderBy == 'RD'">C.RELEASE_DATE DESC, </if>
+	   			<if test="orderBy == 'CA'">C.VOTE_COUNT ASC, </if>
+	   			<if test="orderBy == 'CD'">C.VOTE_COUNT DESC, </if>
+	   			<if test="orderBy == 'TA'">C.TITLE ASC, </if>
+	   			<if test="orderBy == 'TD'">C.TITLE DESC, </if>
+	   			<if test="orderBy == 'PA'">C.POPULARITY ASC, </if>
+   			</if>
+	   		C.POPULARITY DESC
+   		LIMIT
+   			${(page * 30) - 30}, 30
+   	</select>
+    
+
+</mapper>
+<!-- <![CDATA[<=]]> -->

@@ -1,26 +1,104 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http//www.thymeleaf.org"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout}">
+      
+<th:block layout:fragment="script">
+	<script th:src="@{/js/index.js}" type="text/javascript"></script>
+</th:block>
+
+<th:block layout:fragment="css">
+	<link rel="stylesheet" th:href="@{/css/index.css}" />
+</th:block>
+
 
 <div layout:fragment="content">
-    <h1>Memo List</h1>
-
-    <table border="1">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Content</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="memo : ${memos}">
-            <td th:text="${memo.idx}"></td>
-            <td th:text="${memo.contents}"></td>
-        </tr>
-        </tbody>
-    </table>
+    <main>
+    	<div class="searchContainer">
+    		<h1 class="pt-3 text-white">콤마(,)로 구분하여 원하는 키워드들을 검색해보세요</h1>
+    		<div class="d-flex p-2 flex-wrap align-items-center justify-content-center ">
+    			<form action="/search" method="get">
+	    			<input type="text" name="keyword" class="searchInput" autocomplete="off" />
+	    			<button type="button" class="btn btn-primary m-2 search">검색</button>
+    			</form>
+    		</div>
+    		<div class="d-flex p-2 flex-wrap align-items-center justify-content-center">
+    		
+    			<span th:each="searchLog : ${recentSearch}" class="badge d-flex p-2 ms-2 mb-2 align-items-center text-bg-primary rounded-pill">
+					<span th:text="${searchLog.searchWord}" class="px-1 recentKeyword">최근 검색어</span>
+					<svg class="bi ms-1 deleteRecentSearch" fill="white" width="16" height="16">
+						<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+					</svg>
+				</span>
+				
+    		</div>
+    	</div>
+    	
+    	<div class="trendContainer overflow-x-scroll text-nowrap mt-3 mx-3">
+    		<div class="chartTitle">
+    			<h2 class="d-inline-block">현재 트렌드</h2>
+    			<hr class="d-inline-block w-100 m-0 mb-2" />
+    		</div>
+    		<div class="cardContainer ">
+	    		<div th:each="list : ${trend.results}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
+	    			<a th:href="@{|/post/detail/${list.id}|}" class="text-black">
+		    			<div class="card-img-top overflow-hidden position-relative">
+		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
+							   	<p th:text="${list.overview}">소개글</p>
+	    					</div>
+							<img th:if="${list.posterPath != null}" th:src="@{|https://image.tmdb.org/t/p/w500${list.posterPath}|}" class="card-img-top" alt="영화 포스터">
+							<img th:if="${list.posterPath == null}" th:src="@{/images/emptyPoster.png}" class="card-img-top" alt="영화 포스터">
+		    			</div>
+						<div class="card-body">
+							<span th:text="${list.title}" class="d-block mb-3 text-wrap lh-1 fs-6 fw-bold">영화 제목</span>
+							<div class="starContainer">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="orange" class="bi bi-star-fill" viewBox="0 0 16 16">
+									<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+								</svg>
+								<span th:text="${#numbers.formatDecimal(list.voteAverage, 1, 1)}" class="align-text-top">평점</span>
+							</div>
+					  		<p th:text="${#dates.format(list.releaseDate, 'yyyy년 MM월 dd일')}" class="card-text">개봉일자</p>
+						</div>
+					</a>
+				</div>
+			</div>
+    	</div>
+    	
+    	<div class="recentContainer overflow-x-scroll text-nowrap mt-3 mx-3">
+    		<div class="chartTitle">
+    			<h2 class="d-inline-block">최근 개봉</h2>
+    			<hr class="d-inline-block w-100 m-0 mb-2" />
+    		</div>
+    		<!-- 쓰기전에 위에꺼 복붙하고 사용할것 -->
+    		<div class="cardContainer ">
+	    		<div th:each="list : ${recentRelease.results}" class="card movieCard d-inline-block me-3 align-text-top" style="width: 10rem;">
+	    			<a th:href="@{|/post/detail/${list.id}|}" class="text-black">
+		    			<div class="card-img-top overflow-hidden">
+		    				<div class="overview p-3 position-absolute z-1 h-100 w-100">
+							   	<p th:text="${list.overview}">소개글</p>
+	    					</div>
+							<img th:if="${list.posterPath != null}" th:src="@{|https://image.tmdb.org/t/p/w500${list.posterPath}|}" class="card-img-top" alt="영화 포스터">
+							<img th:if="${list.posterPath == null}" th:src="@{/images/emptyPoster.png}" class="card-img-top" alt="영화 포스터">
+		    			</div>
+						<div class="card-body">
+							<span th:text="${list.title}" class="d-block mb-3 text-wrap lh-1 fs-6 fw-bold">영화 제목</span>
+							<div class="starContainer">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="orange" class="bi bi-star-fill" viewBox="0 0 16 16">
+									<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+								</svg>
+								<span th:text="${#numbers.formatDecimal(list.voteAverage, 1, 1)}" class="align-text-top">평점</span>
+							</div>
+					  		<p th:text="${#dates.format(list.releaseDate, 'yyyy년 MM월 dd일')}" class="card-text">개봉일자</p>
+						</div>
+					</a>
+				</div>
+			</div>
+			
+    	</div>
+    </main>
 </div>
 
 </html>
+
+

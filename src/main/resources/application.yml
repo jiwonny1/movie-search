@@ -9,10 +9,11 @@ spring:
     active: local
 # Database 설정
   datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
 #    url: jdbc:mysql://localhost:{포트번호}/{데이터베이스 이름}?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    url: jdbc:log4jdbc:mysql://movie.goosia.com:3306/movie?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:log4jdbc:mysql://movie.goosia.com:3306/movie?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowMultiQueries=true
+
     username: movie
     password: movie1234
   devtools:
@@ -24,6 +25,8 @@ spring:
 # mybatis 설정
 mybatis:
   type-aliases-package: dev.moviesearch
+  type-aliases:
+    userDto: dev.moviesearch.app.user.domain.UserDto
   mapper-locations: classpath:/mybatis/*.xml
   configuration:
     multiple-result-sets-enabled: false
