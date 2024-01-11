@@ -2,6 +2,9 @@ package dev.moviesearch.app.post.controller;
 
 import dev.moviesearch.app.post.domain.PostDto;
 import dev.moviesearch.app.post.service.PostService;
+import dev.moviesearch.app.review.domain.ReviewDto;
+import dev.moviesearch.app.review.service.ReviewService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,11 @@ public class PostController {
 
 	@Autowired
 	private PostService postService;
+	private final ReviewService reviewService;
+	@Autowired
+	public PostController(ReviewService reviewService) {
+		this.reviewService = reviewService;
+	}
 
 
 //	/**
@@ -39,13 +47,19 @@ public class PostController {
 //		return postService.findPostList();
 //	}
 
+	@Operation(summary = "영화 디테일 페이지", description = "영화 페이지입니다.")
 	@GetMapping("/detail/{contentId}")
 	public String showMovieDetail(@PathVariable int contentId, Model model) {
 		PostDto dto = postService.findPost(contentId);
+		List<ReviewDto> reviewDto = reviewService.findReviewList(contentId);
+
 		model.addAttribute("post", dto);
+		model.addAttribute("reviews", reviewDto);
 
 		return "postDetail2";
 	}
+
+	@Operation(summary = "세션 처리", description = "세션 처리")
 	@GetMapping("/session")
 	public String session(Model model, HttpSession session) {
 		session.setAttribute("userId", "Goosia");

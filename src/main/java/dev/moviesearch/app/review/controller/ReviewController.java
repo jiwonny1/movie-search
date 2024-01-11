@@ -2,6 +2,7 @@ package dev.moviesearch.app.review.controller;
 
 import dev.moviesearch.app.review.domain.ReviewDto;
 import dev.moviesearch.app.review.service.ReviewService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,7 @@ public class ReviewController {
 //	}
 
 	// 리뷰 목록
+	@Operation(summary = "영화 리뷰 목록", description = "리뷰 목록 입니다.")
 	@GetMapping("/list/{contentId}")
 	public String showReviewList(@PathVariable int contentId, Model model) {
 		List<ReviewDto> reviewList = reviewService.findReviewList(contentId);
@@ -45,6 +47,8 @@ public class ReviewController {
 
 
 	// 리뷰 등록
+
+	@Operation(summary = "리뷰 등록", description = "리뷰 등록")
 	@PostMapping("/create/{contentId}")
 	public String createReview(@ModelAttribute ReviewDto req, Principal principal) {
 		//임시 아이디

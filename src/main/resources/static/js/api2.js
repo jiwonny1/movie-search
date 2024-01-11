@@ -31,9 +31,8 @@ function showDetail(movieData) {
     movieOverview.textContent = overview;
     console.log(overview);
 }
-
 document.addEventListener("DOMContentLoaded", function () {
-    const stars = document.querySelectorAll(".star-rating input[type='radio']");
+    const stars = document.querySelectorAll(".star-rating-form input[type='radio']");
 
     stars.forEach(function (star) {
         star.addEventListener("change", function () {
@@ -44,15 +43,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function clearAllStars() {
         stars.forEach(function (star) {
-            star.nextElementSibling.classList.remove("selected");
+            star.nextElementSibling.classList.remove("selected-form");
         });
     }
 
     function highlightStars(selectedStar) {
         let currentStar = selectedStar;
         while (currentStar) {
-            currentStar.nextElementSibling.classList.add("selected");
+            currentStar.nextElementSibling.classList.add("selected-form");
             currentStar = currentStar.previousElementSibling;
         }
     }
+});
+document.addEventListener('DOMContentLoaded', function () {
+    // 리뷰 목록을 순회하면서 각 리뷰의 별점을 채워진 별로 표시
+    document.querySelectorAll('.review-item').forEach(function (reviewItem) {
+        const ratingValue = parseInt(reviewItem.querySelector('.star-rating').getAttribute('data-rating'));
+
+        // 기존에 생성된 span 요소를 제거
+        reviewItem.querySelector('.star-rating').innerHTML = '';
+
+        // 별점을 별 모양으로 표시
+        for (let i = 1; i <= 5; i++) {
+            const star = document.createElement('span');
+            star.textContent = i <= ratingValue ? '\u2605' : '\u2606'; // 별 모양 유니코드
+            reviewItem.querySelector('.star-rating').appendChild(star);
+        }
+    });
 });
