@@ -17,7 +17,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping("/go_join") //회원가입 페이지로 이동
+	@GetMapping("/go-join") //회원가입 페이지로 이동
 	public String goJoin(UserDto dto) {
 		return "user/goJoin";
 	}
@@ -42,7 +42,7 @@ public class UserController {
 
 	}
 	
-	@GetMapping("/go_login") //로그인 페이지로 이동
+	@GetMapping("/go-login") //로그인 페이지로 이동
 	public String goLoin(UserDto dto) {
 		return "user/goLogin";
 	}
