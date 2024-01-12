@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.moviesearch.app.post.mapper.PostMapper">
+
+    <select id="selectPostList" resultType="dev.moviesearch.app.post.domain.PostDto">
+        SELECT
+            CONTENT_ID,
+            TITLE,
+            RELEASE_DATE,
+            POSTER_PATH,
+            ORIGINAL_LANGUAGE,
+            POPULARITY,
+            VOTE_AVERAGE,
+            VOTE_COUNT
+        FROM
+            movie.CONTENT
+    </select>
+
+    <select id="selectPost" parameterType="int" resultType="dev.moviesearch.app.post.domain.PostDto">
+        SELECT
+            CONTENT_ID,
+            TITLE,
+            RELEASE_DATE,
+            POSTER_PATH,
+            ORIGINAL_LANGUAGE,
+            POPULARITY,
+            VOTE_AVERAGE,
+            VOTE_COUNT
+        FROM
+            movie.CONTENT
+        WHERE
+            CONTENT_ID = #{contentId}
+    </select>
+
+<!--    <insert id="insertPost" parameterType="dev.moviesearch.app.post.domain.PostDto">-->
+<!--        INSERT INTO movie.CONTENT (contents) VALUES (#{contents})-->
+<!--    </insert>-->
+
+    <update id="updatePost" parameterType="dev.moviesearch.app.post.domain.PostDto">
+        UPDATE movie.CONTENT
+        SET TITLE = #{title},
+            RELEASE_DATE = #{releaseDate},
+            POSTER_PATH = #{posterPath},
+            POPULARITY = #{popularity},
+            VOTE_AVERAGE = #{voteAverage},
+            VOTE_COUNT = #{voteCount}
+        WHERE CONTENT_ID = #{contentId}
+    </update>
+
+    <delete id="deletePost">
+        DELETE FROM movie.CONTENT WHERE CONTENT_ID = #{contentId}
+    </delete>
+
+</mapper>
