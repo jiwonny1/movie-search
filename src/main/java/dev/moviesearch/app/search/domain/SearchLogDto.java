@@ -6,10 +6,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter
-@Setter
 @ToString
 @Builder
 public class SearchLogDto {
+	@Setter
 	private String userId;
 	private String SearchWord;
 	private String SearchDate;
