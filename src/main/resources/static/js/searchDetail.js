@@ -30,7 +30,7 @@ function loadMore() {
 		success: function(data) {
 			$(".cardContainer").append(data);
 			
-			if($(".cardContainer").find(".card").length % 20 != 0){
+			if($(".cardContainer").find(".card").length % 30 != 0){
 				page = -1;
 				return;
 			}
