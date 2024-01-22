@@ -15,4 +15,7 @@ public interface SearchService {
 	List<MovieDto> searchByPartOfTitle(SearchConditionDto param);
 	List<MovieDto> searchByKeyword(SearchConditionDto param);
 	List<MovieDto> searchByHalfKeyword(SearchConditionDto param);
+	
+	// 자바로 검색
+	List<MovieDto> searchUsingJava(SearchConditionDto param, String type);
 }

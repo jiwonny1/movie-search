@@ -21,16 +21,16 @@ public class MovieController {
 	@ResponseBody
 	@GetMapping("/insert")
 	public String insertMovieList() {
-		//for(int year = 2024; year <= 2024; year++) {
+		for(int year = 2023; year <= 2024; year++) {
 			for(int i = 1; i <= 500; i++) {
-				List<MovieDto> data = movieService.getPopularMovieList(i).getResults();
+				List<MovieDto> data = movieService.getMovieListForInsert(i, year).getResults();
 				if(data == null || data.size() == 0) break;
 				
 				movieService.insertMovieList(data);
 				
 				if(data.size() < 20) break;
 			}
-		//}
+		}
 		return "success";
 	}
 

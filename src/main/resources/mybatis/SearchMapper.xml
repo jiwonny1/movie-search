@@ -370,7 +370,96 @@
    		LIMIT
    			${(page * 30) - 30}, 30
    	</select>
+   	
+   	<select id="selectAllContent" resultType="dev.moviesearch.app.movieapi.domain.MovieDto" >
+   		SELECT
+   			C.CONTENT_ID CONTENT_ID,
+   			C.TITLE TITLE,
+   			C.RELEASE_DATE RELEASE_DATE,
+   			C.POSTER_PATH POSTER_PATH,
+   			C.OVERVIEW OVERVIEW,
+   			C.ORIGINAL_LANGUAGE ORIGINAL_LANGUAGE,
+   			C.POPULARITY POPULARITY,
+   			C.VOTE_AVERAGE VOTE_AVERAGE,
+   			C.VOTE_COUNT VOTE_COUNT
+   		FROM
+   			movie.CONTENT C
+   		LIMIT 
+   			0, 1000000000
+   	</select>
+
+	<select id="selectGenreIds" resultType="map">
+    	SELECT
+    		G.CONTENT_ID id,
+    		G.GENRE_ID genreId
+    	FROM
+    		movie.CONTENT_GENRE G
+    	LIMIT
+    		0, 1000000000
+    </select>
     
+    <select id="selectKeywords" resultType="map">
+  		SELECT
+  			K.CONTENT_ID id,
+  			K.KEYWORD keyword
+  		FROM
+  			movie.KEYWORD
+  		LIMIT
+  			0, 1000000000  	
+    </select>
 
 </mapper>
 <!-- <![CDATA[<=]]> -->
+
+
+
+
+
+
+<!-- 
+
+		=======성능 구려서 컨텐츠랑 장르 따로 가져오는걸로 ======
+
+
+
+	<resultMap type="dev.moviesearch.app.movieapi.domain.MovieDto" id="movieDto">
+		<id property="id" column="CONTENT_ID"/>
+		<result property="title" column="TITLE"/>
+		<result property="originalLanguage" column="ORIGINAL_LANGUAGE"/>
+		<result property="overview" column="OVERVIEW"/>
+		<result property="popularity" column="POPULARITY"/>
+		<result property="posterPath" column="POSTER_PATH"/>
+		<result property="releaseDate" column="RELEASE_DATE"/>
+		<result property="voteAverage" column="VOTE_AVERAGE"/>
+		<result property="voteCount" column="VOTE_COUNT"/>
+		<collection property="genreIds" column="id = CONTENT_ID" ofType="java.lang.Integer" select="selectGenreIds" />
+	</resultMap>
+   	
+   	<select id="selectAllContent" resultMap="movieDto" >
+   		SELECT
+   			C.CONTENT_ID CONTENT_ID,
+   			C.TITLE TITLE,
+   			C.RELEASE_DATE RELEASE_DATE,
+   			C.POSTER_PATH POSTER_PATH,
+   			C.OVERVIEW OVERVIEW,
+   			C.ORIGINAL_LANGUAGE ORIGINAL_LANGUAGE,
+   			C.POPULARITY POPULARITY,
+   			C.VOTE_AVERAGE VOTE_AVERAGE,
+   			C.VOTE_COUNT VOTE_COUNT
+   		FROM
+   			movie.CONTENT C
+   		limit 
+   			0, 1000000000
+   	</select>
+    
+    <select id="selectGenreIds" resultType="java.lang.Integer">
+    	SELECT
+    		G.GENRE_ID
+    	FROM
+    		movie.CONTENT_GENRE G
+    	WHERE
+    		G.CONTENT_ID = #{id}
+    	limit
+    		0, 1000
+    </select>
+ -->

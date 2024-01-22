@@ -50,7 +50,7 @@ public class MovieServiceImpl implements MovieService {
 		LocalDate today = LocalDate.now();
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		
-		String requestURL = "https://api.themoviedb.org/3/discover/movie?include_video=false&language=" + language + "&page=" + page + "&region=" + region + "&release_date.gte="+format.format(today.minusMonths(1))+"&release_date.lte="+format.format(today)+"&sort_by=primary_release_date.desc";
+		String requestURL = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=" + language + "&page=" + page + "&region=" + region + "&release_date.gte="+format.format(today.minusMonths(1))+"&release_date.lte="+format.format(today)+"&sort_by=primary_release_date.desc";
 		
 		String jsonData = sendRequest(requestURL);
 		movieList = (MovieListDto) convertJsonToVo(jsonData, MovieListDto.class);

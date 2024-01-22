@@ -24,7 +24,7 @@ public class MainController {
 	public String getIndex(HttpSession session, Model model) {
 		
 		// 개발용 코드----------------------------
-		//session.setAttribute("user", "jsw4795");
+		session.setAttribute("user", "jsw4795");
 		//session.invalidate();
 		//----------------------------------------
 		

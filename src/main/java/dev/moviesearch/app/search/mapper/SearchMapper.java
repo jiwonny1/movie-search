@@ -20,4 +20,8 @@ public interface SearchMapper {
 	List<MovieDto> selectByKeyword(SearchConditionDto param);
 	List<MovieDto> selectByHalfKeyword(SearchConditionDto param);
 	
+	List<MovieDto> selectAllContent();
+	List<Map<String, Integer>> selectGenreIds();
+	List<Map<String, Object>> selectKeywords();
+	
 }
