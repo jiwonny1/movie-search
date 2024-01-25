@@ -104,22 +104,24 @@ public class SearchController {
 		
 		SearchConditionDto param = new SearchConditionDto(keywords, genreIds, page, orderBy, startMonth, endMonth, originalLanguage);
 
-		switch (type) {
-		case "t": 
-			movies = searchService.searchByTitle(param);
-			break;
-		case "ts":
-			movies = searchService.searchByPartOfTitle(param);
-			break;
-		case "k":
-			movies = searchService.searchByKeyword(param);			
-			break;
-		case "ks":
-			movies = searchService.searchByHalfKeyword(param);
-			break;
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + type);
-		}
+		
+		movies = searchService.searchUsingJava(param, type);
+//		switch (type) {
+//		case "t": 
+//			movies = searchService.searchByTitle(param);
+//			break;
+//		case "ts":
+//			movies = searchService.searchByPartOfTitle(param);
+//			break;
+//		case "k":
+//			movies = searchService.searchByKeyword(param);			
+//			break;
+//		case "ks":
+//			movies = searchService.searchByHalfKeyword(param);
+//			break;
+//		default:
+//			throw new IllegalArgumentException("Unexpected value: " + type);
+//		}
 		
 		model.addAttribute("movies", movies);
 		model.addAttribute("type", type);
@@ -142,22 +144,24 @@ public class SearchController {
 		
 		SearchConditionDto param = new SearchConditionDto(keywords, genreIds, page, orderBy, startMonth, endMonth, originalLanguage);
 		
-		switch (type) {
-		case "t": 
-			movies = searchService.searchByTitle(param);
-			break;
-		case "ts":
-			movies = searchService.searchByPartOfTitle(param);
-			break;
-		case "k":
-			movies = searchService.searchByKeyword(param);			
-			break;
-		case "ks":
-			movies = searchService.searchByHalfKeyword(param);
-			break;
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + type);
-		}
+		movies = searchService.searchUsingJava(param, type);
+		
+//		switch (type) {
+//		case "t": 
+//			movies = searchService.searchByTitle(param);
+//			break;
+//		case "ts":
+//			movies = searchService.searchByPartOfTitle(param);
+//			break;
+//		case "k":
+//			movies = searchService.searchByKeyword(param);			
+//			break;
+//		case "ks":
+//			movies = searchService.searchByHalfKeyword(param);
+//			break;
+//		default:
+//			throw new IllegalArgumentException("Unexpected value: " + type);
+//		}
 		
 		model.addAttribute("movies", movies);
 		model.addAttribute("type", type);

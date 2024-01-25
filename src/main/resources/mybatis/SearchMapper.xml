@@ -174,6 +174,8 @@
 	   			<if test="orderBy == 'RD'">C.RELEASE_DATE DESC, </if>
 	   			<if test="orderBy == 'CA'">C.VOTE_COUNT ASC, </if>
 	   			<if test="orderBy == 'CD'">C.VOTE_COUNT DESC, </if>
+	   			<if test="orderBy == 'VA'">C.VOTE_AVERAGE ASC, </if>
+	   			<if test="orderBy == 'VD'">C.VOTE_AVERAGE DESC, </if>
 	   			<if test="orderBy == 'TA'">C.TITLE ASC, </if>
 	   			<if test="orderBy == 'TD'">C.TITLE DESC, </if>
 	   			<if test="orderBy == 'PA'">C.POPULARITY ASC, </if>
@@ -255,6 +257,8 @@
 	   			<if test="orderBy == 'RD'">C.RELEASE_DATE DESC, </if>
 	   			<if test="orderBy == 'CA'">C.VOTE_COUNT ASC, </if>
 	   			<if test="orderBy == 'CD'">C.VOTE_COUNT DESC, </if>
+	   			<if test="orderBy == 'VA'">C.VOTE_AVERAGE ASC, </if>
+	   			<if test="orderBy == 'VD'">C.VOTE_AVERAGE DESC, </if>
 	   			<if test="orderBy == 'TA'">C.TITLE ASC, </if>
 	   			<if test="orderBy == 'TD'">C.TITLE DESC, </if>
 	   			<if test="orderBy == 'PA'">C.POPULARITY ASC, </if>
@@ -362,6 +366,8 @@
 	   			<if test="orderBy == 'RD'">C.RELEASE_DATE DESC, </if>
 	   			<if test="orderBy == 'CA'">C.VOTE_COUNT ASC, </if>
 	   			<if test="orderBy == 'CD'">C.VOTE_COUNT DESC, </if>
+	   			<if test="orderBy == 'VA'">C.VOTE_AVERAGE ASC, </if>
+	   			<if test="orderBy == 'VD'">C.VOTE_AVERAGE DESC, </if>
 	   			<if test="orderBy == 'TA'">C.TITLE ASC, </if>
 	   			<if test="orderBy == 'TD'">C.TITLE DESC, </if>
 	   			<if test="orderBy == 'PA'">C.POPULARITY ASC, </if>
@@ -373,7 +379,7 @@
    	
    	<select id="selectAllContent" resultType="dev.moviesearch.app.movieapi.domain.MovieDto" >
    		SELECT
-   			C.CONTENT_ID CONTENT_ID,
+   			C.CONTENT_ID ID,
    			C.TITLE TITLE,
    			C.RELEASE_DATE RELEASE_DATE,
    			C.POSTER_PATH POSTER_PATH,
@@ -403,7 +409,7 @@
   			K.CONTENT_ID id,
   			K.KEYWORD keyword
   		FROM
-  			movie.KEYWORD
+  			movie.KEYWORD K
   		LIMIT
   			0, 1000000000  	
     </select>
